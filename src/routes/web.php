@@ -5,6 +5,7 @@ use App\Http\Controllers\Apps\RoleManagementController;
 use App\Http\Controllers\Apps\UserManagementController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\StripeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,6 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 });
 
+Route::get('/webhook_endpoints', [StripeController::class, 'getDataStripe'])->name('stripe');
 Route::get('/error', function () {
     abort(500);
 });
