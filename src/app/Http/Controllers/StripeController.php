@@ -90,6 +90,7 @@ class StripeController extends Controller
                 
                 if ($object) {
                     $data_insert = [
+                        'account_id' => isset($paymentData->account) ? $paymentData->account : null,
                         'object_id' => isset($paymentData->object) ? $paymentData->object : null,
                         'payment_intent_id' => isset($object->id) ? $object->id : null,
                         'object' => isset($object->object) ? $object->object : null,
