@@ -14,6 +14,8 @@ class StripeController extends Controller
 {
     //
     public function getDataStripe(){
+        // $json = file_get_contents('php://input');
+        // $payload = json_decode($json, true);
         $payload = '{
             "id": "evt_3Oz4aZIyTqf0e7cM0tK5UPzL",
             "object": "event",
