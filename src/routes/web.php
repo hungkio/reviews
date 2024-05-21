@@ -33,7 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 });
 
-Route::get('/webhook_endpoints', [StripeController::class, 'getDataStripe'])->name('stripe');
+Route::post('/webhook_endpoints', [StripeController::class, 'getDataStripe'])->name('stripe');
 Route::get('/error', function () {
     abort(500);
 });
