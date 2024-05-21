@@ -14,77 +14,8 @@ class StripeController extends Controller
 {
     //
     public function getDataStripe(){
-        // $json = file_get_contents('php://input');
-        // $payload = json_decode($json, true);
-        $payload = '{
-            "id": "evt_3Oz4aZIyTqf0e7cM0tK5UPzL",
-            "object": "event",
-            "account": "acct_1OyClyIyTqf0e7cM",
-            "api_version": "2023-10-16",
-            "created": 1711577096,
-            "data": {
-                "object": {
-                    "id": "pi_3Oz4aZIyTqf0e7cM09acgKJW",
-                    "object": "payment_intent",
-                    "amount": 600000,
-                    "amount_capturable": 0,
-                    "amount_details": {
-                        "tip": []
-                    },
-                    "amount_received": 600000,
-                    "application": null,
-                    "application_fee_amount": null,
-                    "automatic_payment_methods": null,
-                    "canceled_at": null,
-                    "cancellation_reason": null,
-                    "capture_method": "automatic",
-                    "client_secret": null,
-                    "confirmation_method": "automatic",
-                    "created": 1711577095,
-                    "currency": "usd",
-                    "customer": "cus_PogkFewKnKJ2G7",
-                    "description": "Payment for webhook",
-                    "invoice": null,
-                    "last_payment_error": null,
-                    "latest_charge": "ch_3Oz4aZIyTqf0e7cM0pIDkSLa",
-                    "livemode": false,
-                    "metadata": [],
-                    "next_action": null,
-                    "on_behalf_of": null,
-                    "payment_method": "pm_1Oz3NsIyTqf0e7cMEOzWLZhM",
-                    "payment_method_configuration_details": null,
-                    "payment_method_options": {
-                        "card": {
-                            "installments": null,
-                            "mandate_options": null,
-                            "network": null,
-                            "request_three_d_secure": "automatic"
-                        }
-                    },
-                    "payment_method_types": [
-                        "card"
-                    ],
-                    "processing": null,
-                    "receipt_email": null,
-                    "review": null,
-                    "setup_future_usage": null,
-                    "shipping": null,
-                    "source": null,
-                    "statement_descriptor": "payment",
-                    "statement_descriptor_suffix": null,
-                    "status": "succeeded",
-                    "transfer_data": null,
-                    "transfer_group": null
-                }
-            },
-            "livemode": false,
-            "pending_webhooks": 0,
-            "request": {
-                "id": "req_XeXAb59TT1BSKW",
-                "idempotency_key": "0d31a1f0-a69f-4f27-a8ff-c38d852e27d7"
-            },
-            "type": "payment_intent.succeeded"
-        }';
+        $json = file_get_contents('php://input');
+        $payload = json_decode($json, true);
 
         $paymentData = json_decode($payload);
         if ($paymentData && isset($paymentData->data) && isset($paymentData->data->object)) {
