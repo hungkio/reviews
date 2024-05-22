@@ -90,6 +90,14 @@
 				</div>
 				<!--end:Menu sub-->
 			</div>
+			<div class="menu-item">
+				<a class="menu-link {{ request()->routeIs('business.*') ? 'active' : '' }}" href="{{ route('business.index') }}">
+					<span class="menu-bullet">
+						<span class="bullet bullet-dot"></span>
+					</span>
+					<span class="menu-title">Business</span>
+				</a>
+			</div>
 			<!--end:Menu item-->
 			<!--begin:Menu item-->
 			<div class="menu-item pt-5">
