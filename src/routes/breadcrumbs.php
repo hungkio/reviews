@@ -51,3 +51,9 @@ Breadcrumbs::for('user-management.permissions.index', function (BreadcrumbTrail 
     $trail->parent('user-management.index');
     $trail->push('Permissions', route('user-management.permissions.index'));
 });
+
+// Home > Dashboard > User Management > Queue
+Breadcrumbs::for('user-management.queue.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('user-management.index');
+    $trail->push('Queue', route('user-management.queue.index'));
+});
