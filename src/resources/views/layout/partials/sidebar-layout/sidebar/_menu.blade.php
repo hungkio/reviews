@@ -40,6 +40,30 @@
 				<!--end:Menu content-->
 			</div>
 			<!--end:Menu item-->
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('queue-management.*') ? 'here show' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
+					<span class="menu-icon">{!! getIcon('abstract-28', 'fs-2') !!}</span>
+					<span class="menu-title">Queue Management</span>
+					<span class="menu-arrow"></span>
+				</span>
+                <div class="menu-sub menu-sub-accordion">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('queue-management.queue.*') ? 'active' : '' }}" href="{{ route('queue-management.queue.index') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+                            <span class="menu-title">Queue</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                </div>
+                <!--end:Menu link-->
+                <!--begin:Menu sub-->
+
+            </div>
 			<!--begin:Menu item-->
 			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('user-management.*') ? 'here show' : '' }}">
 				<!--begin:Menu link-->

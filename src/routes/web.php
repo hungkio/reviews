@@ -3,6 +3,7 @@
 use App\Http\Controllers\Apps\PermissionManagementController;
 use App\Http\Controllers\Apps\RoleManagementController;
 use App\Http\Controllers\Apps\UserManagementController;
+use App\Http\Controllers\Apps\QueueManagementController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StripeController;
@@ -30,6 +31,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/user-management/users', UserManagementController::class);
         Route::resource('/user-management/roles', RoleManagementController::class);
         Route::resource('/user-management/permissions', PermissionManagementController::class);
+
+    });
+
+    Route::name('queue-management.')->group(function () {
+        Route::resource('/queue-management/queue', QueueManagementController::class);
     });
 
 });

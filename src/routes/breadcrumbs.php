@@ -51,3 +51,15 @@ Breadcrumbs::for('user-management.permissions.index', function (BreadcrumbTrail 
     $trail->parent('user-management.index');
     $trail->push('Permissions', route('user-management.permissions.index'));
 });
+
+// Home > Dashboard > Queue Management
+Breadcrumbs::for('queue-management.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Queue Management', route('queue-management.queue.index'));
+});
+
+// Home > Dashboard > Queue Management > Queue
+Breadcrumbs::for('queue-management.queue.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('queue-management.index');
+    $trail->push('Queue', route('queue-management.queue.index'));
+});
