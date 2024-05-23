@@ -42,6 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::name('settings.')->group(function () {
         Route::resource('/settings/review-destination', ReviewDestinationController::class);
+        Route::post('/settings/review-destination/save', [ReviewDestinationController::class, 'saveSetting'])->name('settings.save-review-destination');
     });
 
 });
