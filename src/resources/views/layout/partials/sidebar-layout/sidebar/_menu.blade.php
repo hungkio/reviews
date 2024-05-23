@@ -40,22 +40,44 @@
 				<!--end:Menu content-->
 			</div>
 			<!--end:Menu item-->
-            <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('queue-management.*') ? 'here show' : '' }}">
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('manage.*') ? 'here show' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
 					<span class="menu-icon">{!! getIcon('abstract-28', 'fs-2') !!}</span>
-					<span class="menu-title">Queue Management</span>
+					<span class="menu-title">Manage</span>
 					<span class="menu-arrow"></span>
 				</span>
                 <div class="menu-sub menu-sub-accordion">
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('queue-management.queue.*') ? 'active' : '' }}" href="{{ route('queue-management.queue.index') }}">
+                        <a class="menu-link {{ request()->routeIs('manage.queue.*') ? 'active' : '' }}" href="{{ route('manage.queue.index') }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
                             <span class="menu-title">Queue</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="#">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+                            <span class="menu-title">Reviews</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link " href="#">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+                            <span class="menu-title">Widgets</span>
                         </a>
                         <!--end:Menu link-->
                     </div>
@@ -64,6 +86,33 @@
                 <!--begin:Menu sub-->
 
             </div>
+
+
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('settings.*') ? 'here show' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
+					<span class="menu-icon">{!! getIcon('abstract-28', 'fs-2') !!}</span>
+					<span class="menu-title">Settings</span>
+					<span class="menu-arrow"></span>
+				</span>
+                <div class="menu-sub menu-sub-accordion">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('settings.review-destination.*') ? 'active' : '' }}" href="{{ route('settings.review-destination.index') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+                            <span class="menu-title">Review Destination</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                </div>
+                <!--end:Menu link-->
+                <!--begin:Menu sub-->
+
+            </div>
+
 			<!--begin:Menu item-->
 			<div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->routeIs('user-management.*') ? 'here show' : '' }}">
 				<!--begin:Menu link-->

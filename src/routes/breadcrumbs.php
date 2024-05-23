@@ -52,14 +52,27 @@ Breadcrumbs::for('user-management.permissions.index', function (BreadcrumbTrail 
     $trail->push('Permissions', route('user-management.permissions.index'));
 });
 
-// Home > Dashboard > Queue Management
-Breadcrumbs::for('queue-management.index', function (BreadcrumbTrail $trail) {
+// Home > Dashboard > Manage
+Breadcrumbs::for('manage.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push('Queue Management', route('queue-management.queue.index'));
+    $trail->push('Manage', route('manage.queue.index'));
 });
 
-// Home > Dashboard > Queue Management > Queue
-Breadcrumbs::for('queue-management.queue.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('queue-management.index');
-    $trail->push('Queue', route('queue-management.queue.index'));
+// Home > Dashboard > Manage > Queue
+Breadcrumbs::for('manage.queue.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('manage.index');
+    $trail->push('Queue', route('manage.queue.index'));
+});
+
+
+// Home > Dashboard > Settings
+Breadcrumbs::for('settings.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('settings.review-destination.index'));
+});
+
+// Home > Dashboard > Settings > Destination
+Breadcrumbs::for('settings.review-destination.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('settings.index');
+    $trail->push('Review Destination', route('settings.review-destination.index'));
 });

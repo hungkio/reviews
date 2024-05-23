@@ -4,6 +4,7 @@ use App\Http\Controllers\Apps\PermissionManagementController;
 use App\Http\Controllers\Apps\RoleManagementController;
 use App\Http\Controllers\Apps\UserManagementController;
 use App\Http\Controllers\Apps\QueueManagementController;
+use App\Http\Controllers\Apps\ReviewDestinationController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StripeController;
@@ -34,8 +35,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     });
 
-    Route::name('queue-management.')->group(function () {
-        Route::resource('/queue-management/queue', QueueManagementController::class);
+    Route::name('manage.')->group(function () {
+        Route::resource('/manage/queue', QueueManagementController::class);
+    });
+
+
+    Route::name('settings.')->group(function () {
+        Route::resource('/settings/review-destination', ReviewDestinationController::class);
     });
 
 });
