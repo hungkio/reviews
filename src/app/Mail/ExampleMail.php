@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ExampleMail extends Mailable
 {
@@ -32,6 +33,7 @@ class ExampleMail extends Mailable
      */
     public function build()
     {
-        return $this->view('pages/apps.settings.email.test')->with('details', $this->details);
+        Log::info('hoang');
+        return $this->view('mails.demo');
     }
 }

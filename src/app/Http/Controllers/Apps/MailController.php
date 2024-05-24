@@ -14,7 +14,9 @@ class MailController extends Controller
     {
         $details = [
             'title' => 'Mail from Laravel',
-            'body' => 'This is a test email sent from Laravel.'
+            'body' => 'This is a test email sent from Laravel.',
+            'username' => 'This is a test email sent from Laravel.',
+            'payment_id' => 'This is a test email sent from Laravel.'
         ];
 
         Mail::to('tranvhoangnd@gmail.com')->send(new ExampleMail($details));
