@@ -78,6 +78,7 @@
                         </span>
                 </button>
             </div>
+            <a href="javascript:;" onclick="sendMail()" class="btn btn-success"> Send email</a>
             </form>
         </div>
         <!--end::Card body-->
@@ -136,6 +137,23 @@
                                 confirmButton: "btn btn-primary"
                             }
                         });
+                    }
+                })
+            }
+
+            function sendMail(){
+                $.ajax({
+                    url: '/send-mail',
+                    data: {},
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-Token': csrfToken
+                    },
+                    success: function (res) {
+                        console.log(res)
+                    },
+                    error: function (err) {
+                        console.log(err)
                     }
                 })
             }

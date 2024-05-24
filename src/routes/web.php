@@ -5,6 +5,7 @@ use App\Http\Controllers\Apps\RoleManagementController;
 use App\Http\Controllers\Apps\UserManagementController;
 use App\Http\Controllers\Apps\QueueManagementController;
 use App\Http\Controllers\Apps\ReviewDestinationController;
+use App\Http\Controllers\Apps\MailController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StripeController;
@@ -42,8 +43,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::name('settings.')->group(function () {
         Route::resource('/settings/review-destination', ReviewDestinationController::class);
-        Route::post('/settings/review-destination/save', [ReviewDestinationController::class, 'saveSetting'])->name('settings.save-review-destination');
+        Route::post('/settings/review-destination/save', [ReviewDestinationController::class, 'saveSetting']);
     });
+
+    Route::post('/send-mail', [MailController::class, 'sendEmail'])->name('send-mail');
 
 });
 
