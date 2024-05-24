@@ -8,6 +8,11 @@
         {{ Breadcrumbs::render('settings.review-destination.index') }}
     @endsection
 
+    <?php
+    $check_social = $result->social ?? null;
+    $check_send_notice = $result->send_notice ?? ''
+    ?>
+
     <div class="card">
         <!--begin::Card body-->
         <div class="card-body py-4">
@@ -19,28 +24,27 @@
                     </select>
                 </div>
                 <div class="col-md-3 col-6">
-                    <select onchange="changeSocial()" value="{{$result->social}}" id="social" name="card_expiry_month"
+                    <select onchange="changeSocial()" value="{{$check_social}}" id="social" name="card_expiry_month"
                             class="form-select form-select-solid">
                         <option disabled selected value="null">Select social</option>
-                        <option {{$result->social == 'x' ? 'selected' : ''}} value="x">X (Twitter)</option>
-                        <option {{$result->social == 'LinkedIn' ? 'selected' : ''}} value="LinkedIn">LinkedIn</option>
-                        <option {{$result->social == 'Facebook' ? 'selected' : ''}} value="Facebook">Facebook</option>
-                        <option {{$result->social == 'Google' ? 'selected' : ''}} value="Google">Google</option>
-                        <option {{$result->social == 'G2' ? 'selected' : ''}} value="G2">G2</option>
-                        <option {{$result->social == 'Capterra' ? 'selected' : ''}} value="Capterra">Capterra</option>
-                        <option {{$result->social == 'ProductHunt' ? 'selected' : ''}} value="ProductHunt">ProductHunt
-                        </option>
-                        <option {{$result->social == 'AppSumo' ? 'selected' : ''}} value="AppSumo">AppSumo</option>
-                        <option {{$result->social == 'Custom' ? 'selected' : ''}} value="Custom">Custom</option>
+                        <option {{$check_social == 'x' ? 'selected' : ''}} value="x">X (Twitter)</option>
+                        <option {{$check_social == 'LinkedIn' ? 'selected' : ''}} value="LinkedIn">LinkedIn</option>
+                        <option {{$check_social == 'Facebook' ? 'selected' : ''}} value="Facebook">Facebook</option>
+                        <option {{$check_social == 'Google' ? 'selected' : ''}} value="Google">Google</option>
+                        <option {{$check_social == 'G2' ? 'selected' : ''}} value="G2">G2</option>
+                        <option {{$check_social == 'Capterra' ? 'selected' : ''}} value="Capterra">Capterra</option>
+                        <option {{$check_social == 'ProductHunt' ? 'selected' : ''}} value="ProductHunt">ProductHunt</option>
+                        <option {{$check_social == 'AppSumo' ? 'selected' : ''}} value="AppSumo">AppSumo</option>
+                        <option {{$check_social == 'Custom' ? 'selected' : ''}} value="Custom">Custom</option>
                     </select>
                 </div>
-                <div class="toggle-show-username col-md-3 col-6 {{$result->social == 'Custom' ? '' : 'd-none'}}">
+                <div class="toggle-show-username col-md-3 col-6 {{$check_social == 'Custom' ? '' : 'd-none'}}">
                     <input id="username" class="form-control form-control-solid" placeholder="Enter username"
-                           value="{{$result->username}}"/>
+                           value="{{$result->username ?? ''}}"/>
                 </div>
                 <div class="col-md-3 col-6">
                     <input id="url" class="form-control form-control-solid" placeholder="Enter link"
-                           value="{{$result->url}}"/>
+                           value="{{$result->url ?? ''}}"/>
                 </div>
             </div>
 
@@ -54,8 +58,8 @@
                 <div class="col-md-3 col-6">
                     <select id="send_notice" name="card_expiry_month" class="form-select form-select-solid">
                         <option disabled selected value="">Select send mail or not</option>
-                        <option {{$result->send_notice == 1 ? 'selected' : ''}} value="1">Send notification</option>
-                        <option {{$result->send_notice == 0 ? 'selected' : ''}} value="0">Don't send notification
+                        <option {{$check_send_notice == 1 ? 'selected' : ''}} value="1">Send notification</option>
+                        <option {{$check_send_notice == 0 ? 'selected' : ''}} value="0">Don't send notification
                         </option>
                     </select>
                 </div>
@@ -69,7 +73,7 @@
                         <span class="indicator-label">
                             Submit
                         </span>
-                        <span class="indicator-progress">
+                    <span class="indicator-progress">
                             Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                         </span>
                 </button>
