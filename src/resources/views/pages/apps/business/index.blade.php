@@ -49,7 +49,7 @@
             <div class="form-group">
                 <label for="logo">Logo:</label>
                 <input type="file"  value="{{ $business->logo ?? '' }}" id="logo" name="logo" accept="image/*" onchange="previewImage(event)" multiple>
-                @if($business->logo)
+                @if($business && $business->logo)
                     <img src="{{ asset($business->logo) }}" alt="Logo" style="max-width: 100px;" id="logoPreview">
                 @endif
             </div>
