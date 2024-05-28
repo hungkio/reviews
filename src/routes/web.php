@@ -12,6 +12,7 @@ use App\Http\Controllers\StripeController;
 use App\Http\Controllers\BusinessController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReviewRequestController;
+use App\Http\Controllers\FrequencyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::name('settings.')->group(function () {
         Route::resource('/settings/review-destination', ReviewDestinationController::class);
         Route::post('/settings/review-destination/save', [ReviewDestinationController::class, 'saveSetting']);
+        Route::resource('/settings/frequency', FrequencyController::class)->only(['index', 'store'])->names([
+            'index' => 'frequency.index',
+            'store' => 'frequency.store',
+        ]);
     });
 
     Route::post('/send-mail', [MailController::class, 'sendEmail'])->name('send-mail');

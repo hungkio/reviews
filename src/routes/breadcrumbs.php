@@ -76,3 +76,9 @@ Breadcrumbs::for('settings.review-destination.index', function (BreadcrumbTrail 
     $trail->parent('settings.index');
     $trail->push('Review Destination', route('settings.review-destination.index'));
 });
+
+// Home > Dashboard > Settings > Frequency
+Breadcrumbs::for('settings.frequency.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('settings.index');
+    $trail->push('Frequency', route('settings.frequency.index'));
+});

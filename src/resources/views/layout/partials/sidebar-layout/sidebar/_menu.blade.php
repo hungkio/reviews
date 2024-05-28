@@ -107,6 +107,16 @@
                         </a>
                         <!--end:Menu link-->
                     </div>
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('settings.frequency.*') ? 'active' : '' }}" href="{{ route('settings.frequency.index') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+                            <span class="menu-title">Frequency</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
                 </div>
                 <!--end:Menu link-->
                 <!--begin:Menu sub-->
