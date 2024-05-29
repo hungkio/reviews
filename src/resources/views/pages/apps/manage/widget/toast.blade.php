@@ -179,7 +179,7 @@
                 index = 0;
             }
         }
-    }, 5000);
+    }, 3000);
 
     function showToast(htmlContent) {
         var toast = document.getElementById("toast");

@@ -11,7 +11,7 @@ class MailController extends Controller
 {
     public function sendEmail(Request $request)
     {
-        return view('mails.rating');
+
         if($request->all()['type'] == 'demo'){
             $details = [
                 'type' => 'test',
