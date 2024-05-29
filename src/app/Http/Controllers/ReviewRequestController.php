@@ -53,7 +53,7 @@ class ReviewRequestController extends Controller
         $user = Auth::user();
         $account_id = $user->account_id;
 
-       
+
         $count_email = DB::table('review_request')
                        ->where('account_id',$user->account_id)
                        ->count();
@@ -68,14 +68,20 @@ class ReviewRequestController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
-    
+
             try {
                 DB::table('review_request')->insert($data_insert);
             } catch (Exception $e) {
                 print_r($e);
             }
         }
-        
+
         return redirect()->back()->with('success', 'Business information saved successfully!');
+    }
+
+    //Hàm này để lưu lại review từ form review trong email nhé
+    public function saveReview(Request $request){
+        dd($request->all());
+        return 'save success';
     }
 }

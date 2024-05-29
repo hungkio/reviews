@@ -233,6 +233,34 @@
             // }
             let csrfToken = "{{ csrf_token() }}";
             let button = document.querySelector("#submit");
+            const ratingHTML = `<div style=" text-align: center; padding: 0 10px;">
+    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+        <span style=" font-size: 2.5em; cursor: pointer; color: #f39c12;" data-value="1">&#9733;</span>
+        <span style=" font-size: 2.5em; cursor: pointer; color: #f39c12;" data-value="1">&#9733;</span>
+        <span style=" font-size: 2.5em; cursor: pointer; color: #f39c12;" data-value="1">&#9733;</span>
+        <span style=" font-size: 2.5em; cursor: pointer; color: #f39c12;" data-value="1">&#9733;</span>
+        <span style=" font-size: 2.5em; cursor: pointer; color: #f39c12;" data-value="1">&#9733;</span>
+    </div>
+    <textarea style="font-family: 'Montserrat', sans-serif; width: 100%;
+            height: 120px;
+            margin-bottom: 20px;
+            padding: 15px;
+            border: none;
+            background-color: rgba(233,236,241,0.77);
+            outline: none;
+            border-radius: 5px;
+            resize: vertical;
+            font-size: 0.7rem;
+            box-sizing: border-box;" disabled placeholder="Enter your review"></textarea>
+    <button style="font-family: 'Montserrat', sans-serif; padding: 10px 55px;
+            border: none;
+            border-radius: 20px;
+            background-color: #0e77ff;
+            color: white;
+            font-size: 0.8rem;
+            cursor: pointer;">Submit
+    </button>
+</div>`
 
             const quill = new Quill('#editor-container', {
                 theme: 'snow',
@@ -269,7 +297,7 @@
                     img.style.height = '150px';
                 });
                 previewFrame.open();
-                previewFrame.write('<h1>' + emailSubject + '</h1>' + tempContainer.innerHTML);
+                previewFrame.write('<h1>' + emailSubject + '</h1>' + tempContainer.innerHTML + ratingHTML);
                 previewFrame.close();
             }
 

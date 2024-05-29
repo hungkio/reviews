@@ -78,8 +78,11 @@
                         </span>
                 </button>
             </div>
-            <a href="javascript:;" onclick="sendMail()" class="btn btn-success"> Send email</a>
             </form>
+            <div class="mt-10">
+                <a href="javascript:;" onclick="sendMail('demo')" class="btn btn-success">Test send email demo</a>
+                <a href="javascript:;" onclick="sendMail('review')" class="btn btn-primary">Test send email review</a>
+            </div>
         </div>
         <!--end::Card body-->
     </div>
@@ -141,10 +144,10 @@
                 })
             }
 
-            function sendMail(){
+            function sendMail(type){
                 $.ajax({
                     url: '/send-mail',
-                    data: {},
+                    data: {'type': type},
                     method: 'POST',
                     headers: {
                         'X-CSRF-Token': csrfToken

@@ -64,6 +64,12 @@ Breadcrumbs::for('manage.queue.index', function (BreadcrumbTrail $trail) {
     $trail->push('Queue', route('manage.queue.index'));
 });
 
+// Home > Dashboard > Manage > Widget
+Breadcrumbs::for('manage.widget.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('manage.index');
+    $trail->push('Widget', route('manage.widget.index'));
+});
+
 
 // Home > Dashboard > Settings
 Breadcrumbs::for('settings.index', function (BreadcrumbTrail $trail) {
@@ -75,10 +81,4 @@ Breadcrumbs::for('settings.index', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('settings.review-destination.index', function (BreadcrumbTrail $trail) {
     $trail->parent('settings.index');
     $trail->push('Review Destination', route('settings.review-destination.index'));
-});
-
-// Home > Dashboard > Settings > Frequency
-Breadcrumbs::for('settings.frequency.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('settings.index');
-    $trail->push('Frequency', route('settings.frequency.index'));
 });
