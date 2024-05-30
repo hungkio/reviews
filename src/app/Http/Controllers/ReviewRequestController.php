@@ -74,9 +74,11 @@ class ReviewRequestController extends Controller
             } catch (Exception $e) {
                 print_r($e);
             }
+        }else{
+            return response()->json(['message' => 'Do not save more than 4 samples'], 500);
         }
 
-        return redirect()->back()->with('success', 'Business information saved successfully!');
+        return response()->json(['message' => 'Successfully updated'], 200);
     }
 
     //Hàm này để lưu lại review từ form review trong email nhé

@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-    Review Request
+        Review Request
     @endsection
 
     <style>
@@ -92,6 +92,7 @@
             max-width: 100%;
             height: 150px;
         }
+
         /* .star-rating {
             font-size: 0;
             white-space: nowrap;
@@ -136,240 +137,311 @@
         } */
     </style>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
 
     <body>
-        <div class="container">
-            <div class="editor mr-2">
-                <div class="add-request mb-2">
-                    <a href="javascript:;" class="btn btn-secondary">
-                        3 days
-                    </a>
-                    <a href="javascript:;" class="btn btn-secondary">
-                        Add
-                    </a>
+    <div class="container">
+        <div class="editor mr-2">
+            <div class="add-request mb-2">
+                <div id="list-template" style="display: flex; float: left">
+
                 </div>
-                    <!-- @for ($i = 1; $i <= 5; $i++)
-                        <a onclick="rateStar({{ $i }})">&#9733;</a>
-                    @endfor -->
-                    <!-- <div class="emoji-rating">
-                        <a onclick="rateEmoji(1)">&#128544;</a>
-                        <a onclick="rateEmoji(2)">&#128542;</a>
-                        <a onclick="rateEmoji(3)">&#128528;</a>
-                        <a onclick="rateEmoji(4)">&#128578;</a>
-                        <a onclick="rateEmoji(5)">&#128512;</a>
-                    </div> -->
-                <input type="hidden" name="rating" id="rating" value="0">
-                <div class="d-flex justify-content-between">
-                    <div class="form-group">
-                        <label for="interval">Interval (after payment)</label>
-                        <div class="d-flex">
-                            <input type="number" class="form-control" id="interval-date" name="interval-date">
-                            <select id="interval-type" class="form-select" name="interval-type"> <!-- Đã sửa "-type" thành "interval-type" -->
-                                <option value="days">Days</option>
-                                <option value="months">Months</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group mr-2 ml-2">
-                        <label for="rating-style">Rating Style</label>
-                        <select id="rating-style" class="form-select" name="rating-style">
-                            <option value="stars">Stars</option>
-                            <option value="emoji">Emoji</option>
+                <a onclick="setNewForm()" href="javascript:;" class="btn btn-primary btn-add">
+                    Add
+                </a>
+            </div>
+            <input type="hidden" name="rating" id="rating" value="0">
+            <div class="d-flex justify-content-between">
+                <div class="form-group">
+                    <label for="interval">Interval (after payment)</label>
+                    <div class="d-flex">
+                        <input type="number" class="form-control" id="interval-date" style="margin-right: 5px;"
+                               name="interval-date">
+                        <select id="interval-type" class="form-select" name="interval-type">
+                            <!-- Đã sửa "-type" thành "interval-type" -->
+                            <option value="days">Days</option>
+                            <option value="months">Months</option>
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="email-subject" name="email-subject" placeholder="Email Subject">
+                <div class="form-group mr-2 ml-2">
+                    <label for="rating-style">Rating Style</label>
+                    <select onchange="updatePreview()" id="rating-style" class="form-select" name="rating-style">
+                        <option value="stars">Stars</option>
+                        <option value="emoji">Emoji</option>
+                    </select>
                 </div>
-                <div id="editor-container"></div>
+            </div>
+            <div class="form-group">
+                <input onkeydown="updatePreview()" type="text" class="form-control" id="email-subject"
+                       name="email-subject" placeholder="Email Subject">
+            </div>
+            <div id="editor-container"></div>
 
-                <button onclick="submitForm()" type="button" class="btn btn-primary mt-10" id="submit">
+            <button onclick="submitForm()" type="button" class="btn btn-primary mt-10" id="submit">
                     <span class="indicator-label">
                         Save
                     </span>
-                    <span class="indicator-progress">
+                <span class="indicator-progress">
                         Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                     </span>
-                </button>
-            </div>
-            <div class="preview">
-                <header>
-                    <div class="device-icons">
-                        <button class="btn btn-secondary mr-3" id="mobile-view" onclick="switchView('mobile')">📱 Mobile</button>
-                        <button class="btn btn-secondary mf-2" id="desktop-view" onclick="switchView('desktop')">💻 Desktop</button>
-                    </div>
-                </header>
-                <iframe id="preview-frame" style="height: 65vh;"></iframe>
-            </div>
+            </button>
         </div>
-
-
-        <script>
-            // function rateStar(rating) {
-            //     const stars = document.querySelectorAll('.star-rating a');
-            //     stars.forEach((star, index) => {
-            //         if (index < rating) {
-            //             star.classList.add('rated');
-            //         } else {
-            //             star.classList.remove('rated');
-            //         }
-            //     });
-            //     document.getElementById('rating').value = rating;
-            // }
-            // function rateEmoji(rating) {
-            //     const emojis = document.querySelectorAll('.emoji-rating a');
-            //     emojis.forEach((emoji, index) => {
-            //         if (index == rating - 1) {
-            //             emoji.classList.add('selected');
-            //         } else {
-            //             emoji.classList.remove('selected');
-            //         }
-            //     });
-            //     document.getElementById('rating').value = rating;
-            // }
-            let csrfToken = "{{ csrf_token() }}";
-            let button = document.querySelector("#submit");
-            const ratingHTML = `<div style=" text-align: center; padding: 0 10px;">
-    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-        <span style=" font-size: 2.5em; cursor: pointer; color: #f39c12;" data-value="1">&#9733;</span>
-        <span style=" font-size: 2.5em; cursor: pointer; color: #f39c12;" data-value="1">&#9733;</span>
-        <span style=" font-size: 2.5em; cursor: pointer; color: #f39c12;" data-value="1">&#9733;</span>
-        <span style=" font-size: 2.5em; cursor: pointer; color: #f39c12;" data-value="1">&#9733;</span>
-        <span style=" font-size: 2.5em; cursor: pointer; color: #f39c12;" data-value="1">&#9733;</span>
+        <div class="preview">
+            <header>
+                <div class="device-icons">
+                    <button class="btn btn-secondary mr-3" id="mobile-view" onclick="switchView('mobile')">📱 Mobile
+                    </button>
+                    <button class="btn btn-secondary mf-2" id="desktop-view" onclick="switchView('desktop')">💻 Desktop
+                    </button>
+                </div>
+            </header>
+            <iframe id="preview-frame" style="height: 65vh;"></iframe>
+        </div>
     </div>
-    <textarea style="font-family: 'Montserrat', sans-serif; width: 100%;
-            height: 120px;
-            margin-bottom: 20px;
-            padding: 15px;
-            border: none;
-            background-color: rgba(233,236,241,0.77);
-            outline: none;
-            border-radius: 5px;
-            resize: vertical;
-            font-size: 0.7rem;
-            box-sizing: border-box;" disabled placeholder="Enter your review"></textarea>
-    <button style="font-family: 'Montserrat', sans-serif; padding: 10px 55px;
-            border: none;
-            border-radius: 20px;
-            background-color: #0e77ff;
-            color: white;
-            font-size: 0.8rem;
-            cursor: pointer;">Submit
-    </button>
-</div>`
 
-            const quill = new Quill('#editor-container', {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        [{
-                            'header': [1, 2, false]
-                        }],
-                        ['bold', 'italic', 'underline'],
-                        ['image', 'code-block']
-                    ]
-                }
-            });
-            let imageHandler = function() {
-                let range = quill.getSelection();
-                let value = prompt('What is the image URL');
-                if (value) {
-                    quill.insertEmbed(range.index, 'image', value, {
-                        width: 300,
-                        height: 200
-                    }, Quill.sources.USER);
-                }
-            };
 
-            function updatePreview() {
-                let previewFrame = document.getElementById('preview-frame').contentWindow.document;
-                let emailSubject = document.getElementById('email-subject').value;
-                let tempContainer = document.createElement('div');
+    <script>
+        // function rateStar(rating) {
+        //     const stars = document.querySelectorAll('.star-rating a');
+        //     stars.forEach((star, index) => {
+        //         if (index < rating) {
+        //             star.classList.add('rated');
+        //         } else {
+        //             star.classList.remove('rated');
+        //         }
+        //     });
+        //     document.getElementById('rating').value = rating;
+        // }
+        // function rateEmoji(rating) {
+        //     const emojis = document.querySelectorAll('.emoji-rating a');
+        //     emojis.forEach((emoji, index) => {
+        //         if (index == rating - 1) {
+        //             emoji.classList.add('selected');
+        //         } else {
+        //             emoji.classList.remove('selected');
+        //         }
+        //     });
+        //     document.getElementById('rating').value = rating;
+        // }
+        let csrfToken = "{{ csrf_token() }}";
+        let button = document.querySelector("#submit");
+        const ratingHTMLStar = `<div style=" text-align: center; padding: 0 10px;">
+                                    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                                        <span style=" font-size: 2.5em; cursor: pointer; color: #f39c12;" data-value="1">&#9733;</span>
+                                        <span style=" font-size: 2.5em; cursor: pointer; color: #f39c12;" data-value="1">&#9733;</span>
+                                        <span style=" font-size: 2.5em; cursor: pointer; color: #f39c12;" data-value="1">&#9733;</span>
+                                        <span style=" font-size: 2.5em; cursor: pointer; color: #f39c12;" data-value="1">&#9733;</span>
+                                        <span style=" font-size: 2.5em; cursor: pointer; color: #f39c12;" data-value="1">&#9733;</span>
+                                    </div>
+                                    <textarea style="font-family: 'Montserrat', sans-serif; width: 100%;
+                                            height: 120px;
+                                            margin-bottom: 20px;
+                                            padding: 15px;
+                                            border: none;
+                                            background-color: rgba(233,236,241,0.77);
+                                            outline: none;
+                                            border-radius: 5px;
+                                            resize: vertical;
+                                            font-size: 0.7rem;
+                                            box-sizing: border-box;" disabled placeholder="Enter your review"></textarea>
+                                    <button style="font-family: 'Montserrat', sans-serif; padding: 10px 55px;
+                                            border: none;
+                                            border-radius: 20px;
+                                            background-color: #0e77ff;
+                                            color: white;
+                                            font-size: 0.8rem;
+                                            cursor: pointer;">Submit
+                                    </button>
+                                </div>`
 
-                tempContainer.innerHTML = quill.root.innerHTML;
-                let images = tempContainer.querySelectorAll('img');
-                images.forEach(function(img) {
-                    img.style.maxWidth = '100%';
-                    img.style.height = '150px';
-                });
-                previewFrame.open();
-                previewFrame.write('<h1>' + emailSubject + '</h1>' + tempContainer.innerHTML + ratingHTML);
-                previewFrame.close();
+        const ratingHTMLEmoji = `<div style=" text-align: center; padding: 0 10px;">
+                                    <div style="display: flex; justify-content: center; margin-bottom: 20px;">😢☹️😐😊😄</div>
+                                    <textarea style="font-family: 'Montserrat', sans-serif; width: 100%;
+                                            height: 120px;
+                                            margin-bottom: 20px;
+                                            padding: 15px;
+                                            border: none;
+                                            background-color: rgba(233,236,241,0.77);
+                                            outline: none;
+                                            border-radius: 5px;
+                                            resize: vertical;
+                                            font-size: 0.7rem;
+                                            box-sizing: border-box;" disabled placeholder="Enter your review"></textarea>
+                                    <button style="font-family: 'Montserrat', sans-serif; padding: 10px 55px;
+                                            border: none;
+                                            border-radius: 20px;
+                                            background-color: #0e77ff;
+                                            color: white;
+                                            font-size: 0.8rem;
+                                            cursor: pointer;">Submit
+                                    </button>
+                                </div>`
+
+        const quill = new Quill('#editor-container', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{
+                        'header': [1, 2, false]
+                    }],
+                    ['bold', 'italic', 'underline'],
+                    ['image', 'code-block']
+                ]
             }
-
-            quill.on('text-change', function(delta, oldDelta, source) {
-                if (source === 'user') {
-                    updatePreview();
-                }
-            });
-            const content = quill.root.innerHTML;
-
-            quill.getModule('toolbar').addHandler('image', selectLocalImage);
-
-            document.getElementById('email-subject').addEventListener('input', updatePreview);
-
-            function switchView(view) {
-                let previewFrame = document.getElementById('preview-frame');
-                if (view === 'mobile') {
-                    previewFrame.style.width = '375px';
-                    previewFrame.style.height = '65vh';
-                    previewFrame.style.margin = 'auto';
-                } else {
-                    previewFrame.style.width = '100%';
-                    previewFrame.style.height = '65vh';
-                }
+        });
+        let imageHandler = function () {
+            let range = quill.getSelection();
+            let value = prompt('What is the image URL');
+            if (value) {
+                quill.insertEmbed(range.index, 'image', value, {
+                    width: 300,
+                    height: 200
+                }, Quill.sources.USER);
             }
-            window.onload = updatePreview;
+        };
 
-            function submitForm() {
-                button.setAttribute("data-kt-indicator", "on");
-                const data_send = {};
-                data_send.interval_date = $("#interval-date").val();
-                data_send.interval_type = $("#interval-type").val();
-                data_send.rating_style = $("#rating-style").val();
-                data_send.email_subject = $("#email-subject").val();
-                data_send.email_body = quill.root.innerHTML;
+        function setNewForm(){
+            $("#interval-date").val('');
+            $("#email-subject").val('')
+            quill.root.innerHTML = '';
+            updatePreview()
+        }
 
-                $.ajax({
-                    url: "{{route('review-request.store')}}",
-                    data: data_send,
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-Token': csrfToken
-                    },
-                    success: function(res) {
-                        button.removeAttribute("data-kt-indicator");
-                        if (res.status == 200) {
-                            Swal.fire({
-                                text: 'Saved successfully',
-                                icon: "success",
-                                buttonsStyling: false,
-                                confirmButtonText: "Ok",
-                                customClass: {
-                                    confirmButton: "btn btn-primary"
-                                }
-                            });
-                        }
-                    },
-                    error: function(err) {
-                        button.removeAttribute("data-kt-indicator");
-                        Swal.fire({
-                            text: "Sorry, looks like there are some errors detected, please try again.",
-                            icon: "error",
-                            buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
-                            customClass: {
-                                confirmButton: "btn btn-primary"
-                            }
-                        });
+        function updatePreview() {
+            let previewFrame = document.getElementById('preview-frame').contentWindow.document;
+            let emailSubject = document.getElementById('email-subject').value;
+            let tempContainer = document.createElement('div');
+
+            tempContainer.innerHTML = quill.root.innerHTML;
+            let images = tempContainer.querySelectorAll('img');
+            images.forEach(function (img) {
+                img.style.maxWidth = '100%';
+                img.style.height = '150px';
+            });
+            previewFrame.open();
+            const rating_style = $("#rating-style").val();
+            if(rating_style == 'stars'){
+                previewFrame.write('<h2>' + emailSubject + '</h2>' + tempContainer.innerHTML + ratingHTMLStar);
+            }else{
+                previewFrame.write('<h2>' + emailSubject + '</h2>' + tempContainer.innerHTML + ratingHTMLEmoji);
+            }
+            previewFrame.close();
+        }
+
+        quill.on('text-change', function (delta, oldDelta, source) {
+            if (source === 'user') {
+                updatePreview();
+            }
+        });
+        const content = quill.root.innerHTML;
+
+        quill.getModule('toolbar').addHandler('image', selectLocalImage);
+
+        document.getElementById('email-subject').addEventListener('input', updatePreview);
+
+        function switchView(view) {
+            let previewFrame = document.getElementById('preview-frame');
+            if (view === 'mobile') {
+                previewFrame.style.width = '375px';
+                previewFrame.style.height = '65vh';
+                previewFrame.style.margin = 'auto';
+            } else {
+                previewFrame.style.width = '100%';
+                previewFrame.style.height = '65vh';
+            }
+        }
+
+        window.onload = updatePreview;
+
+        function submitForm() {
+            button.setAttribute("data-kt-indicator", "on");
+            const data_send = {};
+            const interval_date = $("#interval-date").val();
+            if (interval_date < 0 || !interval_date) {
+                button.removeAttribute("data-kt-indicator");
+                Swal.fire({
+                    text: 'Please check interval date',
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
                     }
-                })
+                });
+                return;
             }
-        </script>
+            const email_subject = $("#email-subject").val();
+            if (email_subject.trim() == '') {
+                button.removeAttribute("data-kt-indicator");
+                Swal.fire({
+                    text: 'Please check email subject',
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
+                });
+                return;
+            }
+            const interval_type = $("#interval-type").val();
+            data_send.interval_date = interval_date;
+            data_send.interval_type = interval_type;
+            data_send.rating_style = $("#rating-style").val();
+            data_send.email_subject = email_subject;
+            data_send.email_body = quill.root.innerHTML;
+
+            $.ajax({
+                url: "{{route('review-request.store')}}",
+                data: data_send,
+                method: 'POST',
+                headers: {
+                    'X-CSRF-Token': csrfToken
+                },
+                success: function (res) {
+                    button.removeAttribute("data-kt-indicator");
+                    if($('#list-template').find('.button-template').length < 4){
+                        const button_template = `<a href="javascript:;" class="btn btn-success button-template" style="margin-right: 5px;">
+                            ${interval_date} ${interval_type}
+                        </a>`;
+                        $('#list-template').append(button_template);
+                        if($('#list-template').find('.button-template').length == 4){
+                            $(".btn-add").remove();
+                        }
+                    }
+
+
+                    Swal.fire({
+                        text: res.data.message,
+                        icon: res.status == 200 ? "success" : 'warning',
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+
+                },
+                error: function (err) {
+                    console.log(err)
+                    button.removeAttribute("data-kt-indicator");
+                    Swal.fire({
+                        text: 'Do not save more than 4 samples',
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                }
+            })
+        }
+    </script>
     </body>
 
 
