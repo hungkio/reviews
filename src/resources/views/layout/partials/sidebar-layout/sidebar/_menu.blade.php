@@ -73,7 +73,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link " href="#">
+                        <a class="menu-link {{ request()->routeIs('manage.widget.*') ? 'active' : '' }}" href="{{ route('manage.widget.index') }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
