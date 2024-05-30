@@ -16,9 +16,13 @@ class ReviewRequestController extends Controller
 
     public function index()
     {
+        $account_id = Auth::user()->account_id;
 
-        $user = Auth::user();
-        return view('pages/apps.review-request.index');
+        $templates = DB::table('review_request')
+            ->where('account_id',$account_id)
+            ->get();
+
+        return view('pages/apps.review-request.index', compact('templates'));
     }
 
     public function store(Request $request)
@@ -70,20 +74,34 @@ class ReviewRequestController extends Controller
             ];
 
             try {
-                DB::table('review_request')->insert($data_insert);
+                $new_template_id = DB::table('review_request')->insertGetId($data_insert);
             } catch (Exception $e) {
                 print_r($e);
             }
         }else{
-            return response()->json(['message' => 'Do not save more than 4 samples'], 500);
+            return response()->json(['message' => 'Do not save more than 4 samples', 'code' => 500], 200);
         }
 
-        return response()->json(['message' => 'Successfully updated'], 200);
+        return response()->json(['message' => 'Successfully updated', 'code'=> 200, 'template_id' => $new_template_id], 200);
+    }
+
+    public function update(Request $request){
+        dd($request->all());
     }
 
     //Hàm này để lưu lại review từ form review trong email nhé
     public function saveReview(Request $request){
         dd($request->all());
         return 'save success';
+    }
+
+    public function getTemplateInfo(Request $request)
+    {
+        $data = $request->all();
+        $template = DB::table('review_request')
+            ->where('id', $data['template_id'])
+            ->first();
+        return response()->json(['message' => 'success', 'data' =>$template, 'code' => 200], 200);
+
     }
 }

@@ -93,6 +93,14 @@
             height: 150px;
         }
 
+        .button-template p{
+            margin-bottom: 0!important;
+        }
+
+        .btn-add p{
+            margin-bottom: 0!important;
+        }
+
         /* .star-rating {
             font-size: 0;
             white-space: nowrap;
@@ -147,11 +155,19 @@
         <div class="editor mr-2">
             <div class="add-request mb-2">
                 <div id="list-template" style="display: flex; float: left">
-
+                    @foreach($templates as $template)
+                        <a href="javascript:;" onclick="getTemplateInfor({{$template->id}})" class="btn btn-sm btn-success button-template" style="margin-right: 5px;">
+                            <i class="fa fa-envelope"></i>
+                            <p>{{$template->interval_date}} {{$template->interval_type}}</p>
+                        </a>
+                    @endforeach
                 </div>
-                <a onclick="setNewForm()" href="javascript:;" class="btn btn-primary btn-add">
-                    Add
-                </a>
+                @if(count($templates) < 4 )
+                    <a onclick="setNewForm()" href="javascript:;" class="btn btn-sm btn-primary btn-add">
+                        <i class="fa fa-plus"></i>
+                        <p>Add</p>
+                    </a>
+                @endif
             </div>
             <input type="hidden" name="rating" id="rating" value="0">
             <div class="d-flex justify-content-between">
@@ -175,13 +191,16 @@
                     </select>
                 </div>
             </div>
+            <div class="d-none">
+                <input type="number" class="d-none" id="template_id" value="0" disabled style="margin-right: 5px;">
+            </div>
             <div class="form-group">
                 <input onkeydown="updatePreview()" type="text" class="form-control" id="email-subject"
                        name="email-subject" placeholder="Email Subject">
             </div>
             <div id="editor-container"></div>
 
-            <button onclick="submitForm()" type="button" class="btn btn-primary mt-10" id="submit">
+            <button onclick="submitForm()" data-action="create" type="button" class="btn btn-primary mt-10" id="submit">
                     <span class="indicator-label">
                         Save
                     </span>
@@ -305,6 +324,8 @@
         };
 
         function setNewForm(){
+            $("#submit").attr('data-action', 'create');
+            $("#template_id").val(0);
             $("#interval-date").val('');
             $("#email-subject").val('')
             quill.root.innerHTML = '';
@@ -358,6 +379,9 @@
         window.onload = updatePreview;
 
         function submitForm() {
+            if($('#list-template').find('.button-template').length == 4){
+                return;
+            }
             button.setAttribute("data-kt-indicator", "on");
             const data_send = {};
             const interval_date = $("#interval-date").val();
@@ -389,6 +413,9 @@
                 return;
             }
             const interval_type = $("#interval-type").val();
+            const template_id = $("#template_id").val();
+            const action = $("#submit").attr('data-action');
+            data_send.id = template_id;
             data_send.interval_date = interval_date;
             data_send.interval_type = interval_type;
             data_send.rating_style = $("#rating-style").val();
@@ -396,7 +423,7 @@
             data_send.email_body = quill.root.innerHTML;
 
             $.ajax({
-                url: "{{route('review-request.store')}}",
+                url: action == 'create' ? "{{route('review-request.store')}}" : "/review-request/update",
                 data: data_send,
                 method: 'POST',
                 headers: {
@@ -405,19 +432,21 @@
                 success: function (res) {
                     button.removeAttribute("data-kt-indicator");
                     if($('#list-template').find('.button-template').length < 4){
-                        const button_template = `<a href="javascript:;" class="btn btn-success button-template" style="margin-right: 5px;">
-                            ${interval_date} ${interval_type}
-                        </a>`;
+                        const button_template = `<a href="javascript:;" onclick="getTemplateInfor(${res?.template_id})" class="btn btn-sm btn-success button-template" style="margin-right: 5px;">
+                                                    <i class="fa fa-envelope"></i>
+                                                    <p>${interval_date} ${interval_type}</p>
+                                                </a>`;
                         $('#list-template').append(button_template);
                         if($('#list-template').find('.button-template').length == 4){
                             $(".btn-add").remove();
                         }
                     }
-
+                    $("#template_id").val(res?.template_id);
+                    $("#submit").attr('data-action', 'update');
 
                     Swal.fire({
-                        text: res.data.message,
-                        icon: res.status == 200 ? "success" : 'warning',
+                        text: res.message,
+                        icon: res.code == 200 ? 'success' : 'warning',
                         buttonsStyling: false,
                         confirmButtonText: "Ok",
                         customClass: {
@@ -430,7 +459,7 @@
                     console.log(err)
                     button.removeAttribute("data-kt-indicator");
                     Swal.fire({
-                        text: 'Do not save more than 4 samples',
+                        text: "Sorry, looks like there are some errors detected, please try again.",
                         icon: "error",
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",
@@ -438,6 +467,43 @@
                             confirmButton: "btn btn-primary"
                         }
                     });
+                }
+            })
+        }
+
+        function getTemplateInfor(template_id){
+            Swal.fire({
+                title: 'Please Wait !',
+                html: '',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            $("#submit").attr('data-action', 'update');
+            $("#template_id").val(template_id);
+            $.ajax({
+                url: '/review-request/get-template-info',
+                data: {'template_id': template_id},
+                method: 'POST',
+                headers: {
+                    'X-CSRF-Token': csrfToken
+                },
+                success: function (res) {
+                    swal.close();
+                    console.log(res);
+                    $("#interval-date").val(res.data.interval_date);
+                    $("#interval-type").val(res.data.interval_type);
+                    $("#email-subject").val(res.data.email_subject);
+                    $("#rating-style").val(res.data.rating_style);
+                    quill.root.innerHTML = res.data.email_body;
+                    updatePreview()
+                },
+                error: function (err) {
+                    swal.close();
+                    console.log(err)
                 }
             })
         }
