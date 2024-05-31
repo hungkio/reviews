@@ -91,6 +91,7 @@ class ReviewRequestController extends Controller
 
     //Hàm này để lưu lại review từ form review trong email nhé
     public function saveReview(Request $request){
+        Log::info(json_encode($request->all()));
         dd($request->all());
         return 'save success';
     }

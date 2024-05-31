@@ -5,6 +5,7 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ExampleMail extends Mailable
 {
@@ -29,11 +30,11 @@ class ExampleMail extends Mailable
      */
     public function build()
     {
-        if($this->details['type'] == 'test'){
+        if($this->details['type'] == 'demo'){
             return $this->view('mails.review-destination')
                 ->subject('Stripe')
                 ->with($this->details);
-        }else if($this->details['type'] == 'demo'){
+        }else if($this->details['type'] == 'review'){
             return $this->view('mails.rating')
                 ->subject('Review')
                 ->with($this->details);

@@ -9,11 +9,11 @@ use App\Http\Controllers\Apps\WidgetManagementController;
 use App\Http\Controllers\Apps\MailController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\FrequencyController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\BusinessController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReviewRequestController;
+use App\Http\Controllers\FrequencyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,7 +66,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 });
 
-Route::post('/save-review', [ReviewRequestController::class, 'saveReview']);
+Route::post('/save-review', [ReviewRequestController::class, 'saveReview'])->name('save-review');
 Route::resource('/business', BusinessController::class);
 Route::post('/webhook_endpoints', [StripeController::class, 'getDataStripe'])->name('stripe');
 Route::get('/error', function () {
