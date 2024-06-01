@@ -62,7 +62,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="#">
+                        <a class="menu-link {{ request()->routeIs('manage.reviews.*') ? 'active' : '' }}" href="{{ route('manage.reviews.index') }}">
 							<span class="menu-bullet">
 								<span class="bullet bullet-dot"></span>
 							</span>
