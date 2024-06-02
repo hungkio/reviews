@@ -4,6 +4,7 @@ use App\Http\Controllers\Apps\PermissionManagementController;
 use App\Http\Controllers\Apps\RoleManagementController;
 use App\Http\Controllers\Apps\UserManagementController;
 use App\Http\Controllers\Apps\QueueManagementController;
+use App\Http\Controllers\Apps\ReviewsController;
 use App\Http\Controllers\Apps\ReviewDestinationController;
 use App\Http\Controllers\Apps\WidgetManagementController;
 use App\Http\Controllers\Apps\MailController;
@@ -42,6 +43,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::name('manage.')->group(function () {
         Route::resource('/manage/queue', QueueManagementController::class);
         Route::resource('/manage/widget', WidgetManagementController::class);
+        Route::resource('/manage/reviews', ReviewsController::class);
     });
 
 
