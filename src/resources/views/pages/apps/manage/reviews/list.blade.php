@@ -3,7 +3,19 @@
     @section('title')
         Reviews
     @endsection
+        <style>
+            .star-gold{
+                color: #fa7023!important;
+                margin-top: 10px;
+                font-size: 1.5rem!important;
+            }
 
+            .star-default{
+                color: #c9c7c7!important;
+                margin-top: 10px;
+                font-size: 1.5rem!important;
+            }
+        </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     @section('breadcrumbs')
@@ -17,25 +29,35 @@
                 <div class="col-md-4 col12">
                     <div class="row">
                         <div class="col-4">
-                                <select class="form-control form-control-solid" data-control="select2" data-placeholder="Filter">
-                                    <option value="" selected disabled>All</option>
-                                    <optgroup label="Rating">
-                                        <option value="1">Option 1</option>
-                                        <option value="2">Option 2</option>
-                                        <option value="3">Option 3</option>
-                                    </optgroup>
-                                    <optgroup label="Status">
-                                        <option value="1">Option 1</option>
-                                        <option value="2">Option 2</option>
-                                        <option value="3">Option 3</option>
-                                    </optgroup>
-                                    <optgroup label="Source">
-                                        <option value="1">Option 1</option>
-                                        <option value="2">Option 2</option>
-                                        <option value="3">Option 3</option>
-                                    </optgroup>
+                            <select class="form-control form-control-solid" data-control="select2"
+                                    data-placeholder="Filter">
+                                <option value="" selected disabled>All</option>
+                                <optgroup label="Rating">
+                                    <option value="0">All</option>
+                                    <option value="1">1 star</option>
+                                    <option value="2">2 star</option>
+                                    <option value="3">3 star</option>
+                                    <option value="4">4 star</option>
+                                    <option value="5">5 star</option>
+                                </optgroup>
+                                <optgroup label="Status">
+                                    <option value="0">All</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Denied">Denied</option>
+                                </optgroup>
+                                <optgroup label="Source">
+                                    <option value="0">All</option>
+                                    <option value="X">X</option>
+                                    <option value="LinkedIn">LinkedIn</option>
+                                    <option value="Facebook">Facebook</option>
+                                    <option value="Google">Google</option>
+                                    <option value="G2">G2</option>
+                                    <option value="Capterra">Capterra</option>
+                                    <option value="AppSumo">AppSumo</option>
+                                    <option value="Email">Email</option>
+                                </optgroup>
 
-                                </select>
+                            </select>
                         </div>
                         <div class="col-4">
                             <input onchange="filter()" class="form-control form-control-solid" placeholder="Pick a date"
@@ -68,42 +90,52 @@
                     @foreach ($result as $key => $record)
                         <tr class="row-item w-100">
                             <td data-bs-toggle="tooltip" class="row cursor-pointer w-100">
-                                    <div class="col-2">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                        <div data-bs-placement="top" title="Featured">
-                                            <i class="fas fa-star" style="color: #fa7023; margin: 10px 0 0 3px"></i>
-                                        </div>
+                                <div class="col-2">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
+                                    <div>
+                                        <a href="javascript:;" onclick="toggleMarkAsFeatured('{{$record->id}}', this)" data-order={{$record->order ?? 0}}>
+                                            <i data-bs-toggle="tooltip" data-bs-placement="top" title="Featured" class="{{ $record->order ? 'star-gold' : 'star-default' }} fas fa-star"></i>
+                                        </a>
                                     </div>
-                                    <div class="col-10">
+                                </div>
+                                <div class="col-10">
+                                    <div style="display: flex; justify-content: space-between;">
                                         <div style="display: flex">
-                                            <div style="display: flex">
-                                                <span>
+                                            <span>
+                                                @for ($i = 0; $i < $record->star; $i++)
                                                  <i class="fas fa-star" style="color: gold;"></i>
-                                                 <i class="fas fa-star" style="color: gold;"></i>
-                                                 <i class="fas fa-star" style="color: gold;"></i>
-                                                 <i class="fas fa-star" style="color: gold;"></i>
-                                                 <i class="fas fa-star" style="color: gold;"></i>
+                                                @endfor
                                             </span>
-                                                <span>
-                                                <h3>John Doe</h3>
+                                            <span style="margin: 0 10px">
+                                                <h3>{{$record->userName}}</h3>
                                             </span>
+                                            @if($record->source)
                                                 <span>
-                                                via Email
-                                            </span>
-                                            </div>
-                                            <div>
-
-                                            </div>
+                                                    via {{$record->source ?? ''}}
+                                                </span>
+                                            @endif
                                         </div>
-                                        <p>
-                                            {{$record->review}}
-                                        </p>
                                         <div>
-                                            <a href="#" class="btn btn-sm btn-light-primary">Approve</a>
-                                            <a href="#" class="btn btn-sm btn-light-danger">Deny</a>
+                                            <span>
+                                                {{$record->dateTime ?? ''}}
+                                            </span>
                                         </div>
-
                                     </div>
+                                    <p>
+                                        {{$record->review}}
+                                    </p>
+                                    <div>
+                                        @if(is_null($record->status))
+                                        <a onclick="updateStatus(this.parentElement, {{$record->id}}, 1)" href="javascript:;" class="btn-approve btn btn-sm btn-light-primary">Approve</a>
+                                        <a onclick="updateStatus(this.parentElement, {{$record->id}}, 0)" href="javascript:;" class="btn-deny btn btn-sm btn-light-danger">Deny</a>
+                                        @elseif($record->status == 1)
+                                            <p class="text-primary text-approved">Approved</p>
+                                        @else
+                                            <p class="text-danger text-deny">Denied</p>
+                                        @endif
+                                    </div>
+
+                                </div>
                             </td>
                         </tr>
                     @endforeach
@@ -120,6 +152,7 @@
 
     @push('scripts')
         <script>
+            let csrfToken = "{{ csrf_token() }}";
             initDataTable();
             initDatePicker();
 
@@ -162,61 +195,105 @@
                 });
             }
 
-            function copyToClipboard(form) {
-                const text = $(form).text();
-                navigator.clipboard.writeText(text).then(function () {
-                    Swal.fire({
-                        text: "Copied to clipboard",
-                        icon: "success",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
+            function updateStatus(form, id, status){
+                Swal.fire({
+                    title: 'Please Wait !',
+                    html: '',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: '/manage/reviews/update-status',
+                    data: {'id': id, 'status': status},
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-Token': csrfToken
+                    },
+                    success: function (res) {
+                        if(res.code == 200){
+                            $(form).find(".btn-approve").remove();
+                            $(form).find(".btn-deny").remove();
+                            alertSuccess(res.message);
+                            if(status == 1){
+                                $(form).append(`<p class="text-primary text-approved">Approved</p>`)
+                            }else{
+                                $(form).append(`<p class="text-danger text-deny">Denied</p>`)
+                            }
                         }
-                    });
-                }, function (err) {
-                    Swal.fire({
-                        text: "Sorry, looks like there are some errors detected, please try again.",
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
+                        swal.close();
+                    },
+                    error: function (err) {
+                        swal.close();
+                        alertError()
+                        console.log(err)
+                    }
+                })
+            }
+
+            function toggleMarkAsFeatured(record_id, form){
+                const order = $(form).attr('data-order');
+                Swal.fire({
+                    title: 'Please Wait !',
+                    html: '',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: '/manage/reviews/update-order',
+                    data: {'id': record_id},
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-Token': csrfToken
+                    },
+                    success: function (res) {
+                        if(res.code == 200){
+                            if(!order || order == 0){
+                                $(form).attr('data-order', 1);
+                                $(form).find('i').first().removeClass('star-default').addClass('star-gold');
+                            }else{
+                                $(form).attr('data-order', 0);
+                                $(form).find('i').first().removeClass('star-gold').addClass('star-default');
+                            }
+                            alertSuccess(res.message);
                         }
-                    });
+                        swal.close();
+                    },
+                    error: function (err) {
+                        swal.close();
+                        alertError()
+                        console.log(err)
+                    }
+                })
+            }
+
+            function alertError(){
+                Swal.fire({
+                    text: "Sorry, looks like there are some errors detected, please try again.",
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
                 });
             }
 
-            function filter() {
-                $('#queue_table').find('.row-item').removeClass('d-none');
-                const status = $("#filter_status").val();
-                const date = $("#filter_date").val();
-                $('#queue_table').find('.row-item').each(function () {
-                    const this_date = $(this).find('.date').first().text();
-                    const this_status = $(this).find('.status').first().text();
-                    if (!status && date != '') {
-                        if (this_date == date) {
-                            $(this).removeClass('d-none')
-                        } else {
-                            $(this).addClass('d-none')
-                        }
-                    }
-                    if (status && date == '') {
-                        if (this_status == status) {
-                            $(this).removeClass('d-none')
-                        } else {
-                            $(this).addClass('d-none')
-                        }
-                    }
-                    if (status && date != '') {
-                        if (this_status == status && this_date == date) {
-                            $(this).removeClass('d-none')
-                        } else {
-                            $(this).addClass('d-none')
-                        }
-                    }
-                    if (!status && date == '') {
-                        $(this).removeClass('d-none')
+            function alertSuccess(text){
+                Swal.fire({
+                    text: text,
+                    icon: 'success',
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
                     }
                 });
             }

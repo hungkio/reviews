@@ -1,107 +1,37 @@
 var reviews = [
     {
-        name: 'Jame Ruffle',
+        name: 'Elon Musk',
         star: 4,
         social: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg',
         avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
         review: "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
     },
     {
-        name: 'Mark Donner',
+        name: 'Katty Perry',
         star: 5,
         social: 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-logo-icon.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
+        avatar: 'https://m.media-amazon.com/images/M/MV5BMjE4MDI3NDI2Nl5BMl5BanBnXkFtZTcwNjE5OTQwOA@@._V1_FMjpg_UX1000_.jpg',
         review: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
     },
     {
-        name: 'Jame Ruffle',
+        name: 'Justin Bieber',
         star: 4,
         social: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
+        avatar: 'https://www.elleman.vn/app/uploads/2019/02/28/Justin-Bieber-elle-man-featured-image.jpg',
         review: "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
     },
     {
-        name: 'Mark Donner',
+        name: 'Sơn Tùng M-TP',
         star: 5,
         social: 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-logo-icon.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
+        avatar: 'https://vnmedia.vn/file/8a10a0d36ccebc89016ce0c6fa3e1b83/8a10a0d36f363ce5016f7dd294f74173/122021/son-tung-m-tp-1_20211206094100.jpg',
         review: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
     },
     {
-        name: 'Babi Dong',
+        name: 'Min',
         star: 2,
         social: 'https://cdn1.iconfinder.com/data/icons/logotypes/32/circle-linkedin-512.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-    },
-    {
-        name: 'Babi Dong',
-        star: 2,
-        social: 'https://cdn1.iconfinder.com/data/icons/logotypes/32/circle-linkedin-512.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-    },
-    {
-        name: 'Jame Ruffle',
-        star: 4,
-        social: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-    },
-    {
-        name: 'Mark Donner',
-        star: 5,
-        social: 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-logo-icon.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
-    },
-    {
-        name: 'Babi Dong',
-        star: 2,
-        social: 'https://cdn1.iconfinder.com/data/icons/logotypes/32/circle-linkedin-512.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-    },
-    {
-        name: 'Jame Ruffle',
-        star: 4,
-        social: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-    },
-    {
-        name: 'Mark Donner',
-        star: 5,
-        social: 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-logo-icon.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
-    },
-    {
-        name: 'Babi Dong',
-        star: 2,
-        social: 'https://cdn1.iconfinder.com/data/icons/logotypes/32/circle-linkedin-512.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-    },
-    {
-        name: 'Jame Ruffle',
-        star: 4,
-        social: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-    },
-    {
-        name: 'Mark Donner',
-        star: 5,
-        social: 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-logo-icon.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
-    },
-    {
-        name: 'Babi Dong',
-        star: 2,
-        social: 'https://cdn1.iconfinder.com/data/icons/logotypes/32/circle-linkedin-512.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
+        avatar: 'https://vcdn1-giaitri.vnecdn.net/2022/03/19/Min-1647677192-2663-1647678009.jpg?w=500&h=300&q=100&dpr=2&fit=crop&s=Csi0zEr0dOyLzjG7x4wSlA',
         review: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
     }
 ];

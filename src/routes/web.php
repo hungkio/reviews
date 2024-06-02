@@ -44,6 +44,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/manage/queue', QueueManagementController::class);
         Route::resource('/manage/widget', WidgetManagementController::class);
         Route::resource('/manage/reviews', ReviewsController::class);
+        Route::post('/manage/reviews/update-status', [ReviewsController::class, 'updateStatus']);
+        Route::post('/manage/reviews/update-order', [ReviewsController::class, 'updateOrder']);
     });
 
 
