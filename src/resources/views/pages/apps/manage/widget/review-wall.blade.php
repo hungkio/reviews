@@ -7,6 +7,6 @@
 </head>
 <body>
 <div class="container" id="container"></div>
-<script src="https://reviews.stage.n-framescorp.com/assets/plugins/custom/widget/review-wall.js"/>
+<script src="https://reviews.stage.n-framescorp.com/assets/plugins/custom/widget/review-wall.js"></script>
 </body>
 </html>

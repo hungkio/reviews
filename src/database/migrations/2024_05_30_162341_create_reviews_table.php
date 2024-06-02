@@ -16,9 +16,10 @@ return new class extends Migration
             $table->tinyInteger('star');
             $table->string('review')->nullable();
             $table->string('order')->nullable();
-            $table->integer('customer_id')->nullable();
-            $table->integer('account_id')->nullable();
+            $table->string('customer_id')->nullable();
+            $table->string('account_id')->nullable();
             $table->string('source')->nullable();
+            $table->tinyInteger('status')->comment('null: no status, 1: approved, 0 denied')->nullable();
             $table->timestamps();
         });
     }

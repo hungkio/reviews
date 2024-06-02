@@ -21,10 +21,8 @@
 <div class="fullscreen">
     <p>Your website</p>
 </div>
-<div id="toast">
-    <button class="close-btn" onclick="closeToast()">&times;</button>
-</div>
-<script src="https://reviews.stage.n-framescorp.com/assets/plugins/custom/widget/notification.js"/>
+<div id="toast"><button class="close-btn" onclick="closeToast()">&times;</button></div>
+<script src="https://reviews.stage.n-framescorp.com/assets/plugins/custom/widget/notification.js"></script>
 
 </body>
 </html>

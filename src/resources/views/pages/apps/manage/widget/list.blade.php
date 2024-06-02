@@ -16,40 +16,40 @@
                     <div class="rounded border p-10 w-100">
                         <h4 class="mb-6">Review wall</h4>
                         <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#modal_preview_review_wall"
-                           class="btn btn-link btn-color-success btn-active-color-warning me-5 mb-2"> Preview</a>
+                           class="btn btn-link btn-color-success  me-5 mb-2"> Preview</a>
                         <a href="javascript:;" onclick="copyCode('wall')" data-bs-toggle="tooltip"
                            data-bs-placement="top" title="Click to copy code to clipboard"
-                           class="btn btn-link btn-color-primary btn-active-color-warning me-5 mb-2"> Copy code</a>
+                           class="btn btn-link btn-color-primary  me-5 mb-2"> Copy code</a>
                     </div>
                 </div>
                 <div class="col-12 mb-3">
                     <div class="rounded border p-10 w-100">
                         <h4 class="mb-6">Badge</h4>
                         <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#modal_preview_badge"
-                           class="btn btn-link btn-color-success btn-active-color-warning me-5 mb-2"> Preview</a>
+                           class="btn btn-link btn-color-success  me-5 mb-2"> Preview</a>
                         <a href="javascript:;" onclick="copyCode('badge')" data-bs-toggle="tooltip"
                            data-bs-placement="top" title="Click to copy code to clipboard"
-                           class="btn btn-link btn-color-primary btn-active-color-warning me-5 mb-2"> Copy code</a>
+                           class="btn btn-link btn-color-primary  me-5 mb-2"> Copy code</a>
                     </div>
                 </div>
                 <div class="col-12 mb-3">
                     <div class="rounded border p-10 w-100">
                         <h4 class="mb-6">Notifications</h4>
                         <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#modal_preview_toast"
-                           class="btn btn-link btn-color-success btn-active-color-warning me-5 mb-2"> Preview</a>
+                           class="btn btn-link btn-color-success  me-5 mb-2"> Preview</a>
                         <a href="javascript:;" onclick="copyCode('notification')" data-bs-toggle="tooltip"
                            data-bs-placement="top" title="Click to copy code to clipboard"
-                           class="btn btn-link btn-color-primary btn-active-color-warning me-5 mb-2"> Copy code</a>
+                           class="btn btn-link btn-color-primary  me-5 mb-2"> Copy code</a>
                     </div>
                 </div>
                 <div class="col-12 mb-3">
                     <div class="rounded border p-10 w-100">
                         <h4 class="mb-6">Carousel</h4>
                         <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#modal_preview_carousel"
-                           class="btn btn-link btn-color-success btn-active-color-warning me-5 mb-2"> Preview</a>
+                           class="btn btn-link btn-color-success  me-5 mb-2"> Preview</a>
                         <a href="javascript:;" onclick="copyCode('carousel')" data-bs-toggle="tooltip"
                            data-bs-placement="top" title="Click to copy code to clipboard"
-                           class="btn btn-link btn-color-primary btn-active-color-warning me-5 mb-2"> Copy code</a>
+                           class="btn btn-link btn-color-primary  me-5 mb-2"> Copy code</a>
                     </div>
                 </div>
             </div>
@@ -161,68 +161,69 @@
     </div>
 
     @push('scripts')
-        <script>
-            var badge_widget = `<div id="import_badge" style="width: 250px; height: 50px;"></div>
-<script src="https://reviews.stage.n-framescorp.com/assets/plugins/custom/widget/badge.js"/>`;
+            <script>
+                const badge_widget_html = `<div id="import_badge" style="width: 250px; height: 50px;"></div>`;
+                const badge_widget_script = `<script src="https://reviews.stage.n-framescorp.com/assets/plugins/custom/widget/badge.js"><\/script>`;
 
-            var review_wall_widget = `<div class="container" id="container"></div>
-<script src="https://reviews.stage.n-framescorp.com/assets/plugins/custom/widget/review-wall.js"/>`;
+                const review_wall_widget_html = `<div class="container" id="container"></div>`;
+                const review_wall_widget_script = `<script src="https://reviews.stage.n-framescorp.com/assets/plugins/custom/widget/review-wall.js"><\/script>`;
 
-            var notification_widget = `<div id="toast"><button class="close-btn" onclick="closeToast()">&times;</button></div>
-<script src="https://reviews.stage.n-framescorp.com/assets/plugins/custom/widget/notification.js"/>`;
+                const notification_widget_html = `<div id="toast"><button class="close-btn" onclick="closeToast()">&times;</button></div>`;
+                const notification_widget_script = `<script src="https://reviews.stage.n-framescorp.com/assets/plugins/custom/widget/notification.js"><\/script>`;
 
-            var carousel_widget = `<div class="carousel-container">
-    <button class="carousel-button prev" onclick="moveCarousel(-1)">
-        <i class="action-btn fa fa-solid fa-arrow-left"></i>
-    </button>
-    <div class="carousel">
-        <div class="carousel-items">
+                const carousel_widget_html = `<div class="carousel-container">
+        <button class="carousel-button prev" onclick="moveCarousel(-1)">
+            <i class="action-btn fa fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="carousel">
+            <div class="carousel-items">
+            </div>
         </div>
-    </div>
-    <button class="carousel-button next" onclick="moveCarousel(1)">
-        <i class="action-btn fa fa-solid fa-arrow-right"></i>
-    </button>
-</div>
-<script src="https://reviews.stage.n-framescorp.com/assets/plugins/custom/widget/carousel.js"/>`
+        <button class="carousel-button next" onclick="moveCarousel(1)">
+            <i class="action-btn fa fa-solid fa-arrow-right"></i>
+        </button>
+    </div>`;
+                const carousel_widget_script = `<script src="https://reviews.stage.n-framescorp.com/assets/plugins/custom/widget/carousel.js"><\/script>`;
 
-            function copyCode(type) {
-                let text = '';
-                if (type == 'wall') {
-                    text = review_wall_widget;
-                }
-                if (type == 'badge') {
-                    text = badge_widget;
-                }
-                if (type == 'notification') {
-                    text = notification_widget;
-                }
-                if (type == 'carousel') {
-                    text = carousel_widget;
-                }
-                navigator.clipboard.writeText(text).then(function () {
-                    Swal.fire({
-                        text: "Copied to clipboard",
-                        icon: "success",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
+                function copyCode(type) {
+                    let text = '';
+                    if (type == 'wall') {
+                        text = review_wall_widget_html + review_wall_widget_script;
+                    }
+                    if (type == 'badge') {
+                        text = badge_widget_html + badge_widget_script;
+                    }
+                    if (type == 'notification') {
+                        text = notification_widget_html + notification_widget_script;
+                    }
+                    if (type == 'carousel') {
+                        text = carousel_widget_html + carousel_widget_script;
+                    }
+                    navigator.clipboard.writeText(text).then(function () {
+                        Swal.fire({
+                            text: "Copied to clipboard",
+                            icon: "success",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok",
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+                    }, function (err) {
+                        Swal.fire({
+                            text: "Sorry, looks like there are some errors detected, please try again.",
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
                     });
-                }, function (err) {
-                    Swal.fire({
-                        text: "Sorry, looks like there are some errors detected, please try again.",
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
-                });
-            }
-        </script>
+                }
+            </script>
 
-    @endpush
+
+        @endpush
 
 </x-default-layout>
