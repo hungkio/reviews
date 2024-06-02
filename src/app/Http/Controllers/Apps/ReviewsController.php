@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Exception;
+use Illuminate\Support\Facades\Log;
 
 class ReviewsController extends Controller
 {
@@ -85,5 +85,32 @@ class ReviewsController extends Controller
         }
 
         return $result;
+    }
+    
+    public function insertReview(Request $request)
+    {
+        $data= $request->all();
+
+        $data_insert = [
+            'star' => $data['star'],
+            'review' => $data['review'],
+            'customer_id' => $data['customer_id'],
+            'account_id' => $data['account_id'],
+            'source' => 'Email',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ];
+
+        try {
+            DB::table('reviews')->insert($data_insert);
+            if ($data['star'] > 3) {
+                return redirect()->away('https://www.youtube.com/');
+            }else{
+                // send email
+            }
+
+        } catch (Exception $e) {
+            print_r($e);
+        }
     }
 }
