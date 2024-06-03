@@ -46,6 +46,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/manage/reviews', ReviewsController::class);
         Route::post('/manage/reviews/update-status', [ReviewsController::class, 'updateStatus']);
         Route::post('/manage/reviews/update-order', [ReviewsController::class, 'updateOrder']);
+        Route::post('/manage/reviews/update-multiple-status', [ReviewsController::class, 'updateMultipleStatus']);
     });
 
 

@@ -13,18 +13,27 @@ class ReviewsController extends Controller
 {
     public function index()
     {
-//        $get_account_id = Auth::user()->account_id;
-
-        $get_account_id = 'user_123';
+        $get_account_id = Auth::user()->account_id;
 
         $result = DB::table('reviews')
             ->where('account_id',$get_account_id )
             ->orderByDesc('order')
             ->get();
 
-        $result = $result->map(function ($item, $key) {
+        $customerIds = $result->pluck('customer_id')->unique()->values()->all();
+
+        $customers = DB::table('customers')
+            ->whereIn('customers_id', $customerIds)
+            ->get();
+
+        $customerData = [];
+        foreach ($customers as $customer) {
+            $customerData[$customer->customers_id] = ['name' => $customer->name, 'email' => $customer->email];
+        }
+
+        $result = $result->map(function ($item, $key) use($customerData) {
             $item->dateTime = $this->getDateTime($item->created_at);
-            $item->userName = 'David Jameson';
+            $item->userName = $customerData[$item->customer_id]['name'];
             return $item;
         });
 
@@ -36,6 +45,19 @@ class ReviewsController extends Controller
         try {
             DB::table('reviews')
                 ->where('id', $data['id'])
+                ->update(['status' => $data['status']]);
+            return response()->json(['message' => 'Successfully updated', 'code' => 200], 200);
+        }catch (Exception $e) {
+            print_r($e);
+            return response()->json(['message' => 'Something went wrong', 'code' => 500], 200);
+        }
+    }
+
+    public function updateMultipleStatus(Request $request){
+        try {
+            $data = $request->all();
+            DB::table('reviews')
+                ->whereIn('id', $data['review_ids'])
                 ->update(['status' => $data['status']]);
             return response()->json(['message' => 'Successfully updated', 'code' => 200], 200);
         }catch (Exception $e) {
@@ -65,26 +87,21 @@ class ReviewsController extends Controller
 
     }
 
-    public function getDateTime($date)
+    public function getDateTime($time)
     {
-        $pastTime = Carbon::parse($date);
-        $currentTime = Carbon::now();
-
-        $differenceInMinutes = $currentTime->diffInMinutes($pastTime);
-
-        if ($differenceInMinutes < 60) {
-            $result = $differenceInMinutes . ' minutes';
-        } elseif ($differenceInMinutes < 1440) {
-            $hours = floor($differenceInMinutes / 60);
-            $minutes = $differenceInMinutes % 60;
-            $result = $hours . ' hours ' . $minutes . ' minutes';
-        } else {
-            $days = floor($differenceInMinutes / 1440);
-            $hours = floor(($differenceInMinutes % 1440) / 60);
-            $result = $days . ' days ' . $hours . ' hours';
+        $oldDateTime = Carbon::createFromFormat('Y-m-d H:i:s', $time);
+        $currentDateTime = Carbon::now();
+        $minutesDifference = $oldDateTime->diffInMinutes($currentDateTime);
+        if ($minutesDifference < 60) {
+            return $minutesDifference . ' minutes ago';
         }
+        $hoursDifference = $oldDateTime->diffInHours($currentDateTime);
+        if ($hoursDifference < 24) {
+            return $hoursDifference . ' hours ago';
+        }
+        $daysDifference = $oldDateTime->diffInDays($currentDateTime);
+        return $daysDifference . ' days ago';
 
-        return $result;
     }
     
     public function insertReview(Request $request)
