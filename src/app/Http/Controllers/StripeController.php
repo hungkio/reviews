@@ -26,7 +26,7 @@ class StripeController extends Controller
             $payment_id = $object->id ?? null;
             $customer_id = $object->customer ?? null;
         
-            $this->insertPayment($paymentData, $object, $data);
+            $this->insertPayment($paymentData, $object, $data, $customer_id);
 
             $stripe = new \Stripe\StripeClient('sk_test_51Oyz3vHGEde3YLOc00eCULJJXYHWAzCN3B0QYN54DpCOBBTxUMu5BnlUJfb1WvOC6dk9SfdEwHbpUJ45aoJuRXwT00TwqVF7Zl');
             try {
@@ -45,10 +45,11 @@ class StripeController extends Controller
         }
     }
 
-    public function insertPayment($paymentData, $object, $data){
+    public function insertPayment($paymentData, $object, $data, $customer_id){
         try {
             $data_insert = [
                 'account_id' => isset($paymentData->account) ? $paymentData->account : null,
+                'customers_id' => $customer_id,
                 'object_id' => isset($paymentData->object) ? $paymentData->object : null,
                 'payment_intent_id' => isset($object->id) ? $object->id : null,
                 'object' => isset($object->object) ? $object->object : null,
@@ -106,11 +107,11 @@ class StripeController extends Controller
     
     public function insertCustomers($customers, $account_id){
         try {
-            $check_customers_exits = DB::table('customers')
-                                ->where('account_id', $account_id)
-                                ->where('customers_id', $customers->id)
-                                ->first();
-            if(!$check_customers_exits){
+            // $check_customers_exits = DB::table('customers')
+            //                     ->where('account_id', $account_id)
+            //                     ->where('customers_id', $customers->id)
+            //                     ->first();
+            // if(!$check_customers_exits){
                 $data_insert = [
                     'account_id' => isset($account_id) ? $account_id : null,
                     'customers_id' => isset($customers->id) ? $customers->id : null,
@@ -137,7 +138,7 @@ class StripeController extends Controller
                     'updated_at' => Carbon::now(),
                 ];
                 DB::table('customers')->insert($data_insert);
-            }
+            // }
         } catch (Exception $e) {
             print_r($e);
         }
