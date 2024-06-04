@@ -110,8 +110,6 @@ class SendEmailReview extends Command
                 $interval_date = $reviewRequests[$i]->interval_date + $reviewRequests[$i - 1]->interval_date;
             }
             $date_send = $created_at->copy()->addDays($interval_date)->format('Y-m-d');
-            Log::info('date_send');
-            Log::info(json_encode($date_send));
             Log::info('now');
             Log::info(json_encode($now));
             if(($now == $date_send) && $email){
