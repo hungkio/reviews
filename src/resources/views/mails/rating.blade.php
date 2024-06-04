@@ -33,10 +33,7 @@ $emojis = ["😡", "😟", "😐", "😊", "😍"];
 
 <body>
     <form action="{{ route('webform.show') }}" method="GET">
-        <input type="hidden" name="email" value="{{$data->email ?? ''}}">
-        <input type="hidden" name="customer_id" value="{{$data->customers_id ?? ''}}">
-        <input type="hidden" name="id_update" value="{{$data->id ?? ''}}">
-        <input type="hidden" name="account_id" value="{{$data->account_id ?? ''}}">
+        <input type="hidden" name="payment_id" value="{{$data->payment_intent_id ?? ''}}">
 
         <label for="review">Feedback:</label><br>
         <textarea id="review" name="review" rows="4" cols="50"></textarea><br>

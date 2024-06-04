@@ -30,7 +30,7 @@ class ExampleMail extends Mailable
      */
     public function build()
     {
-        if($this->details['type'] == 'demo'){
+        if($this->details['type'] == 'demo' || $this->details['type'] == 'feedback'){
             return $this->view('mails.review-destination')
                 ->subject('Stripe')
                 ->with($this->details);

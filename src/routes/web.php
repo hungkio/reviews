@@ -42,6 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::name('manage.')->group(function () {
         Route::resource('/manage/queue', QueueManagementController::class);
+        Route::post('/manage/queue/update-status', [QueueManagementController::class, 'updateStatus']);
         Route::resource('/manage/widget', WidgetManagementController::class);
         Route::resource('/manage/reviews', ReviewsController::class);
         Route::post('/manage/reviews/update-status', [ReviewsController::class, 'updateStatus']);
@@ -65,11 +66,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/preview/badge', [WidgetManagementController::class, 'previewBadge']);
     Route::get('/preview/toast', [WidgetManagementController::class, 'previewToast']);
     Route::get('/preview/carousel', [WidgetManagementController::class, 'previewCarousel']);
-
+    
     Route::resource('/review-request', ReviewRequestController::class);
     Route::post('/review-request/get-template-info', [ReviewRequestController::class, 'getTemplateInfo']);
     Route::post('/review-request/update', [ReviewRequestController::class, 'update']);
-
+    
 });
 
 Route::post('/webform/store', [ReviewsController::class, 'insertReview'])->name('webform.store');

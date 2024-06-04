@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Services\PayUService\Exception;
+use Illuminate\Support\Facades\Password;
 
 class StripeController extends Controller
 {
@@ -190,6 +191,12 @@ class StripeController extends Controller
                     'email_verified_at' => Carbon::now(),
                 ];
                 DB::table('users')->insert($data_insert);
+                if(isset($customers->email)){
+                    $email = [
+                        'email' => $customers->email,
+                    ];
+                    Password::sendResetLink($email);
+                }
             }
         } catch (Exception $e) {
             print_r($e);

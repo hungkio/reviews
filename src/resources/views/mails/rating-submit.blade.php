@@ -35,10 +35,7 @@ $rating_style = 'stars';
 <body>
     <form action="{{ route('webform.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <input type="hidden" name="email" value="{{$email ?? ''}}">
-        <input type="hidden" name="customer_id" value="{{$customer_id ?? ''}}">
-        <input type="hidden" name="account_id" value="{{$account_id ?? ''}}">
-        <input type="hidden" name="id_update" value="{{$id_update ?? ''}}">
+        <input type="hidden" name="payment_id" value="{{$payment_id ?? ''}}">
 
         <label for="review">Feedback:</label><br>
         <textarea id="review" name="review" rows="4" cols="50" value="{{$review ?? ''}}">{{ $review ?? '' }}</textarea><br>

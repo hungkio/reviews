@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Mail\ExampleMail;
+use Illuminate\Support\Facades\Mail;
 
 class ReviewsController extends Controller
 {
@@ -108,22 +110,51 @@ class ReviewsController extends Controller
     {
         $data= $request->all();
 
+        $payment_id = $data['payment_id'];
+        
+        $payment = DB::table('customers')
+            ->join('payments', 'customers.customers_id', 'payments.customer')
+            ->join('accounts', 'customers.account_id', '=', 'accounts.accounts_id')
+            ->join('setting_review_destination', 'customers.account_id', '=', 'setting_review_destination.account_id')
+            ->where('payments.payment_intent_id', $payment_id)
+            ->select(
+                'customers.email',
+                'customers.name',
+                'customers.phone',
+                'customers.customers_id',
+                'customers.account_id',
+                'payments.payment_intent_id',
+                'accounts.reply_to_email',
+                'setting_review_destination.url',
+                'setting_review_destination.send_notice'
+            )
+            ->first();
+
+        
+        $payment->review = $data['review'];
+        $payment->star = $data['star'];
+        
         $data_insert = [
             'star' => $data['star'],
             'review' => $data['review'],
-            'customer_id' => $data['customer_id'],
-            'account_id' => $data['account_id'],
+            'customer_id' => $payment->customers_id,
+            'account_id' => $payment->account_id,
             'source' => 'Email',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];
-
         try {
             DB::table('reviews')->insert($data_insert);
-            if ($data['star'] > 3) {
-                return redirect()->away('https://www.youtube.com/');
+            if ($data['star'] > 3 && isset($payment->url)) {
+                return redirect()->away($payment->url);
             }else{
-                // send email
+                $details = [
+                    'type' => 'feedback',
+                    'data' => $payment,
+                ];
+                if ($payment && isset($payment->reply_to_email) && isset($payment->send_notice)) {
+                    Mail::to($payment->reply_to_email)->send(new ExampleMail($details));
+                }
             }
 
         } catch (Exception $e) {
