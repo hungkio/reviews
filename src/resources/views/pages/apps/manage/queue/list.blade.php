@@ -18,7 +18,7 @@
                             <select onchange="filter()" id="filter_status" name="card_expiry_month"
                                     class="form-select form-select-solid"
                                     data-control="select2" data-hide-search="true" data-placeholder="Filter">
-                                <option disabled selected value="">Filter</option>
+                                <option selected value="all">All</option>
                                 <option value="Scheduled">Scheduled</option>
                                 <option value="Sent">Sent</option>
                                 <option value="Cancelled">Cancelled</option>
@@ -59,13 +59,13 @@
                             <td data-bs-toggle="tooltip" data-bs-placement="left" title="Click to copy to clipboard"
                                 class="customer_name text-nowrap cursor-pointer"
                                 onclick="copyToClipboard(this)">{{$record['name']}}</td>
-                            <td class="date text-nowrap">21/02/2024</td>
-                            <td class="status text-nowrap">Scheduled</td>
+                            <td class="date text-nowrap">{{$record['created_at']}}</td>
+                            <td class="status text-nowrap">{{$record['status']}}</td>
                             <td class="text-nowrap">
                                 <div class="rounded">
-                                    <a href="#" class="btn btn-sm btn-light-primary">Cancel</a>
-                                    <a href="#" class="btn btn-sm btn-light-success">Send Now</a>
-                                    <a href="#" class="btn btn-sm btn-light-warning">Unsubscribe</a>
+                                    <a href="javascript:;" onclick="updateStatus({{$record['id']}}, 'Cancel', this.parentElement.parentElement.parentElement)" class="btn btn-sm btn-light-primary">Cancel</a>
+                                    <a href="javascript:;" onclick="sendMail('review')" class="btn btn-sm btn-light-success">Send Now</a>
+                                    <a href="javascript:;" onclick="updateStatus({{$record['id']}}, 'Unsubscribe', this.parentElement.parentElement.parentElement)" class="btn btn-sm btn-light-warning">Unsubscribe</a>
                                 </div>
                             </td>
                         </tr>
@@ -81,12 +81,11 @@
         <!--end::Card body-->
     </div>
 
-    <livewire:permission.permission-modal></livewire:permission.permission-modal>
     @push('scripts')
         <script>
             initDataTable();
             initDatePicker();
-
+            let csrfToken = "{{ csrf_token() }}";
             function initDatePicker() {
                 $(document).ready(function () {
                     $("#filter_date").daterangepicker({
@@ -153,11 +152,13 @@
 
             function filter() {
                 $('#queue_table').find('.row-item').removeClass('d-none');
-                const status = $("#filter_status").val();
+                let status = $("#filter_status").val();
+                status = status.toUpperCase();
                 const date = $("#filter_date").val();
                 $('#queue_table').find('.row-item').each(function () {
                     const this_date = $(this).find('.date').first().text();
-                    const this_status = $(this).find('.status').first().text();
+                    let this_status = $(this).find('.status').first().text();
+                    this_status = this_status.toUpperCase();
                     if (!status && date != '') {
                         if (this_date == date) {
                             $(this).removeClass('d-none')
@@ -166,14 +167,14 @@
                         }
                     }
                     if (status && date == '') {
-                        if (this_status == status) {
+                        if (this_status == status || status == "all") {
                             $(this).removeClass('d-none')
                         } else {
                             $(this).addClass('d-none')
                         }
                     }
                     if (status && date != '') {
-                        if (this_status == status && this_date == date) {
+                        if ((this_status == status || status == 'all') && this_date == date) {
                             $(this).removeClass('d-none')
                         } else {
                             $(this).addClass('d-none')
@@ -181,6 +182,92 @@
                     }
                     if (!status && date == '') {
                         $(this).removeClass('d-none')
+                    }
+                });
+            }
+
+            function sendMail(type){
+                showLoading()
+                $.ajax({
+                    url: '/send-mail',
+                    data: {'type': type},
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-Token': csrfToken
+                    },
+                    success: function (res) {
+                        if(res.code == 200) {
+                            alertSuccess('Sent successfully')
+                        }else{
+                            alertError();
+                        }
+                        swal.close();
+                    },
+                    error: function (err) {
+                        console.log(err)
+                        alertError();
+                        swal.close();
+                    }
+                })
+            }
+
+            function updateStatus(id, status, form){
+                showLoading()
+                $.ajax({
+                    url: '/manage/queue/update-status',
+                    data: {'id': id, 'status': status},
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-Token': csrfToken
+                    },
+                    success: function (res) {
+                        if(res.code == 200){
+                            $(form).find('.status').first().text(status);
+                            alertSuccess('Updated successfully')
+                        }else{
+                            alertError();
+                        }
+                        swal.close();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        swal.close();
+                        alertError()
+                    }
+                })
+            }
+            function alertError(){
+                Swal.fire({
+                    text: "Sorry, looks like there are some errors detected, please try again.",
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
+                });
+            }
+
+            function alertSuccess(text){
+                Swal.fire({
+                    text: text,
+                    icon: 'success',
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
+                });
+            }
+
+            function showLoading(){
+                Swal.fire({
+                    title: 'Please Wait !',
+                    html: '',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
                     }
                 });
             }
