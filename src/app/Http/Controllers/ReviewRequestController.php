@@ -22,8 +22,12 @@ class ReviewRequestController extends Controller
         $templates = DB::table('review_request')
             ->where('account_id',$account_id)
             ->get();
+        $get_account = DB::table('accounts')
+            ->where('accounts_id',$account_id)
+            ->first();
+        $background_color = $get_account->color ?? 'white';
 
-        return view('pages/apps.review-request.index', compact('templates'));
+        return view('pages/apps.review-request.index', compact('templates', 'background_color'));
     }
 
     public function store(Request $request)
@@ -87,7 +91,23 @@ class ReviewRequestController extends Controller
     }
 
     public function update(Request $request){
-        dd($request->all());
+        $data = $request->all();
+        $data_update = [
+            "interval_date" => $data['interval_date'],
+            "interval_type" => $data['interval_type'],
+            "rating_style" => $data['rating_style'],
+            "email_subject" => $data['email_subject'],
+            "email_body" => $data['email_body']
+        ];
+        try {
+            DB::table('review_request')
+            ->where('id', $data['id'])
+            ->update($data_update);
+            return response()->json(['message' => 'Successfully updated', 'code'=> 200, 'template_id' => $data['id']], 200);
+        } catch (Exception $e) {
+            print_r($e);
+            return response()->json(['message' => 'Something went wrong', 'code'=> 500, 'template_id' => $data['id']], 200);
+        }
     }
 
     //Hàm này để lưu lại review từ form review trong email nhé

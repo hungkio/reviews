@@ -105,13 +105,13 @@ class ReviewsController extends Controller
         return $daysDifference . ' days ago';
 
     }
-    
+
     public function insertReview(Request $request)
     {
         $data= $request->all();
 
         $payment_id = $data['payment_id'];
-        
+
         $payment = DB::table('customers')
             ->join('payments', 'customers.customers_id', 'payments.customer')
             ->join('accounts', 'customers.account_id', '=', 'accounts.accounts_id')
@@ -130,10 +130,10 @@ class ReviewsController extends Controller
             )
             ->first();
 
-        
+
         $payment->review = $data['review'];
         $payment->star = $data['star'];
-        
+
         $data_insert = [
             'star' => $data['star'],
             'review' => $data['review'],

@@ -23,6 +23,7 @@
     @endsection
 
     <div class="card">
+        <a href="javascript:;" onclick="getAllPublicReviews()" class="btn btn-success">Lấy public reviews</a>
         <!--begin::Card body-->
         <div class="card-body py-4">
             <div class="row fv-row">
@@ -363,6 +364,20 @@
                     error: function (err) {
                         swal.close();
                         alertError()
+                        console.log(err)
+                    }
+                })
+            }
+
+            function getAllPublicReviews(){
+                $.ajax({
+                    url: 'login',
+                    data: "",
+                    method: 'POST',
+                    success: function (res) {
+                        console.log('success:', res)
+                    },
+                    error: function (err) {
                         console.log(err)
                     }
                 })

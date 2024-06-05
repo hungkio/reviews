@@ -66,11 +66,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/preview/badge', [WidgetManagementController::class, 'previewBadge']);
     Route::get('/preview/toast', [WidgetManagementController::class, 'previewToast']);
     Route::get('/preview/carousel', [WidgetManagementController::class, 'previewCarousel']);
-    
+
     Route::resource('/review-request', ReviewRequestController::class);
     Route::post('/review-request/get-template-info', [ReviewRequestController::class, 'getTemplateInfo']);
     Route::post('/review-request/update', [ReviewRequestController::class, 'update']);
-    
+
 });
 
 Route::post('/webform/store', [ReviewsController::class, 'insertReview'])->name('webform.store');
