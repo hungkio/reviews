@@ -64,7 +64,7 @@
                             <td class="text-nowrap">
                                 <div class="rounded">
                                     <a href="javascript:;" onclick="updateStatus({{$record['id']}}, 'Cancel', this.parentElement.parentElement.parentElement)" class="btn btn-sm btn-light-primary">Cancel</a>
-                                    <a href="javascript:;" onclick="sendMail('review')" class="btn btn-sm btn-light-success">Send Now</a>
+                                    <a href="javascript:;" onclick="sendMail({{$record['id']}}, 'review', this.parentElement.parentElement.parentElement)" class="btn btn-sm btn-light-success">Send Now</a>
                                     <a href="javascript:;" onclick="updateStatus({{$record['id']}}, 'Unsubscribe', this.parentElement.parentElement.parentElement)" class="btn btn-sm btn-light-warning">Unsubscribe</a>
                                 </div>
                             </td>
@@ -150,15 +150,28 @@
                 });
             }
 
+            function getStatus(status){
+                switch (status) {
+                    case 'Cancel':
+                        return 'CANCELLED';
+                    case 'Unsubscribe':
+                        return 'UNSUBSCRIBED';
+                    case 'Sent':
+                        return 'SENT';
+                    default:
+                        return 'ALL'
+                }
+            }
+
             function filter() {
                 $('#queue_table').find('.row-item').removeClass('d-none');
                 let status = $("#filter_status").val();
-                status = status.toUpperCase();
+                status = (status.trim()).toUpperCase();
                 const date = $("#filter_date").val();
                 $('#queue_table').find('.row-item').each(function () {
                     const this_date = $(this).find('.date').first().text();
                     let this_status = $(this).find('.status').first().text();
-                    this_status = this_status.toUpperCase();
+                    this_status = getStatus(this_status.trim());
                     if (!status && date != '') {
                         if (this_date == date) {
                             $(this).removeClass('d-none')
@@ -167,14 +180,16 @@
                         }
                     }
                     if (status && date == '') {
-                        if (this_status == status || status == "all") {
+                        console.log(this_status == status,this_status, status);
+                        if (this_status == status || status == "ALL") {
                             $(this).removeClass('d-none')
                         } else {
                             $(this).addClass('d-none')
                         }
                     }
                     if (status && date != '') {
-                        if ((this_status == status || status == 'all') && this_date == date) {
+                        console.log(this_status == status , status == 'ALL', this_status, status);
+                        if ((this_status == status || status == 'ALL') && this_date == date) {
                             $(this).removeClass('d-none')
                         } else {
                             $(this).addClass('d-none')
@@ -186,7 +201,7 @@
                 });
             }
 
-            function sendMail(type){
+            function sendMail(id, type, form){
                 showLoading()
                 $.ajax({
                     url: '/send-mail',
@@ -197,11 +212,12 @@
                     },
                     success: function (res) {
                         if(res.code == 200) {
-                            alertSuccess('Sent successfully')
+                            alertSuccess('Sent successfully');
+                            updateStatus(id, 'Sent', form)
                         }else{
                             alertError();
+                            swal.close();
                         }
-                        swal.close();
                     },
                     error: function (err) {
                         console.log(err)
