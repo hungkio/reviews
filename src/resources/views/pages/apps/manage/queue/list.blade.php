@@ -210,14 +210,9 @@
                     headers: {
                         'X-CSRF-Token': csrfToken
                     },
-                    success: function (res) {
-                        if(res.code == 200) {
-                            alertSuccess('Sent successfully');
-                            updateStatus(id, 'Sent', form)
-                        }else{
-                            alertError();
-                            swal.close();
-                        }
+                    success: function (res) {    
+                        alertSuccess('Sent successfully');
+                        updateStatus(id, 'Sent', form);
                     },
                     error: function (err) {
                         console.log(err)
