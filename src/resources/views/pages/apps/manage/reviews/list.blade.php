@@ -371,7 +371,7 @@
 
             function getAllPublicReviews(){
                 $.ajax({
-                    url: 'login',
+                    url: '/get-reviews',
                     data: "",
                     method: 'POST',
                     success: function (res) {

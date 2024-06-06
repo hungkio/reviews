@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
 
 
-class PublicReviewsController extends Controller
+class PublicReviewsController extends BaseController
 {
     public function getPublicReviews()
     {
@@ -13,8 +14,6 @@ class PublicReviewsController extends Controller
             ->where('status', 1)
             ->where('order', 1)
             ->get();
-        dd($results);
-
         $formattedResults = [];
 
         foreach ($results as $result) {
