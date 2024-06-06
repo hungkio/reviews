@@ -100,49 +100,6 @@
         .btn-add p{
             margin-bottom: 0!important;
         }
-
-        /* .star-rating {
-            font-size: 0;
-            white-space: nowrap;
-            display: inline-block;
-            width: 125px;
-            height: 25px;
-            overflow: hidden;
-            position: relative;
-            line-height: 25px;
-        }
-        .star-rating a {
-            text-decoration: none;
-            font-size: 25px;
-            color: #ccc;
-            margin: 0 2px;
-            cursor: pointer;
-        }
-        .star-rating .rated {
-            color: gold;
-        }
-        .emoji-rating {
-            font-size: 0;
-            white-space: nowrap;
-            display: inline-block;
-            width: auto;
-            height: 50px;
-            overflow: hidden;
-            position: relative;
-            line-height: 50px;
-        }
-        .emoji-rating a {
-            text-decoration: none;
-            font-size: 40px;
-            margin: 0 5px;
-            cursor: pointer;
-        }
-        .emoji-rating a:hover {
-            transform: scale(1.2);
-        }
-        .emoji-rating .selected {
-            opacity: 0.7;
-        } */
     </style>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
@@ -224,28 +181,6 @@
 
 
     <script>
-        // function rateStar(rating) {
-        //     const stars = document.querySelectorAll('.star-rating a');
-        //     stars.forEach((star, index) => {
-        //         if (index < rating) {
-        //             star.classList.add('rated');
-        //         } else {
-        //             star.classList.remove('rated');
-        //         }
-        //     });
-        //     document.getElementById('rating').value = rating;
-        // }
-        // function rateEmoji(rating) {
-        //     const emojis = document.querySelectorAll('.emoji-rating a');
-        //     emojis.forEach((emoji, index) => {
-        //         if (index == rating - 1) {
-        //             emoji.classList.add('selected');
-        //         } else {
-        //             emoji.classList.remove('selected');
-        //         }
-        //     });
-        //     document.getElementById('rating').value = rating;
-        // }
         let csrfToken = "{{ csrf_token() }}";
         let button = document.querySelector("#submit");
         const ratingHTMLStar = `<div style=" text-align: center; padding: 20px 10px; background-color: {{$background_color}}">

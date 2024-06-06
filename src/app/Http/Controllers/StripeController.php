@@ -27,15 +27,15 @@ class StripeController extends Controller
             $payment_id = $object->id ?? null;
             $customer_id = $object->customer ?? null;
         
-            $this->insertPayment($paymentData, $object, $data, $customer_id);
-
+            
             $stripe = new \Stripe\StripeClient('sk_test_51Oyz3vHGEde3YLOc00eCULJJXYHWAzCN3B0QYN54DpCOBBTxUMu5BnlUJfb1WvOC6dk9SfdEwHbpUJ45aoJuRXwT00TwqVF7Zl');
             try {
                 $customers = $stripe->customers->retrieve($customer_id, [], ['stripe_account' => $account_id]);
                 $accounts = $stripe->accounts->retrieve($account_id, []);
                 $this->insertUsers($customers, $account_id);
-                $this->insertCustomers($customers, $account_id);
                 $this->insertAccount($accounts);
+                $this->insertCustomers($customers, $account_id);
+                $this->insertPayment($paymentData, $object, $data, $customer_id, $account_id);
             
             } catch(\UnexpectedValueException $e) {
                 print_r($e);
@@ -46,8 +46,37 @@ class StripeController extends Controller
         }
     }
 
-    public function insertPayment($paymentData, $object, $data, $customer_id){
+    public function insertPayment($paymentData, $object, $data, $customer_id,$account_id){
+        
         try {
+            $count_payment = DB::table('payments')
+                                ->where('customer', $customer_id)
+                                ->count();
+            $frequency = DB::table('accounts')
+                                ->where('accounts_id',$account_id)
+                                ->addSelect('frequency')
+                                ->first();
+            $status_email = null;
+            if (!$frequency || ($frequency == 1 && $count_payment == 0) || 
+                ($frequency == 2 && $count_payment >= 1) || 
+                ($frequency == 3 && $count_payment >= 2)) {
+                $status_email = 'Scheduled';
+            }
+
+            if($frequency == 4){
+                //Xử lý thay thế data
+            }
+
+            if($frequency == 5){
+                $count_payment = DB::table('payments')
+                                ->where('customer', $customer_id)
+                                ->where('status_email' , '=', 'Sent')
+                                ->count();
+                if(!$count_payment){
+                    $status_email = 'Scheduled';
+                }
+            }
+           
             $data_insert = [
                 'account_id' => isset($paymentData->account) ? $paymentData->account : null,
                 'customers_id' => $customer_id,
@@ -97,6 +126,7 @@ class StripeController extends Controller
                 'pending_webhooks' => isset($data->pending_webhooks) ? $data->pending_webhooks : null,
                 'request' => isset($data->request) ? json_encode($data->request) : null,
                 'type' => isset($data->type) ? $data->type : null,
+                'status_email' => $status_email,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
@@ -108,11 +138,11 @@ class StripeController extends Controller
     
     public function insertCustomers($customers, $account_id){
         try {
-            // $check_customers_exits = DB::table('customers')
-            //                     ->where('account_id', $account_id)
-            //                     ->where('customers_id', $customers->id)
-            //                     ->first();
-            // if(!$check_customers_exits){
+            $check_customers_exits = DB::table('customers')
+                                ->where('account_id', $account_id)
+                                ->where('customers_id', $customers->id)
+                                ->first();
+            if(!$check_customers_exits){
                 $data_insert = [
                     'account_id' => isset($account_id) ? $account_id : null,
                     'customers_id' => isset($customers->id) ? $customers->id : null,
@@ -139,7 +169,7 @@ class StripeController extends Controller
                     'updated_at' => Carbon::now(),
                 ];
                 DB::table('customers')->insert($data_insert);
-            // }
+            }
         } catch (Exception $e) {
             print_r($e);
         }
