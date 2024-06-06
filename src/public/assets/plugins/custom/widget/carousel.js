@@ -96,113 +96,7 @@ function init() {
     document.head.appendChild(style);
 }
 
-var items = [
-    {
-        name: 'Jame Ruffle',
-        star: 4,
-        social: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-    },
-    {
-        name: 'Mark Donner',
-        star: 5,
-        social: 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-logo-icon.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
-    },
-    {
-        name: 'Jame Ruffle',
-        star: 4,
-        social: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-    },
-    {
-        name: 'Mark Donner',
-        star: 5,
-        social: 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-logo-icon.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
-    },
-    {
-        name: 'Babi Dong',
-        star: 2,
-        social: 'https://cdn1.iconfinder.com/data/icons/logotypes/32/circle-linkedin-512.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-    },
-    {
-        name: 'Babi Dong',
-        star: 2,
-        social: 'https://cdn1.iconfinder.com/data/icons/logotypes/32/circle-linkedin-512.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-    },
-    {
-        name: 'Jame Ruffle',
-        star: 4,
-        social: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-    },
-    {
-        name: 'Mark Donner',
-        star: 5,
-        social: 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-logo-icon.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
-    },
-    {
-        name: 'Babi Dong',
-        star: 2,
-        social: 'https://cdn1.iconfinder.com/data/icons/logotypes/32/circle-linkedin-512.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-    },
-    {
-        name: 'Jame Ruffle',
-        star: 4,
-        social: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-    },
-    {
-        name: 'Mark Donner',
-        star: 5,
-        social: 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-logo-icon.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
-    },
-    {
-        name: 'Babi Dong',
-        star: 2,
-        social: 'https://cdn1.iconfinder.com/data/icons/logotypes/32/circle-linkedin-512.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-    },
-    {
-        name: 'Jame Ruffle',
-        star: 4,
-        social: 'https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-    },
-    {
-        name: 'Mark Donner',
-        star: 5,
-        social: 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-logo-icon.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
-    },
-    {
-        name: 'Babi Dong',
-        star: 2,
-        social: 'https://cdn1.iconfinder.com/data/icons/logotypes/32/circle-linkedin-512.png',
-        avatar: 'https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/1/8/2024-01-02t080338z2118854214rc2j95a5h65urtrmadp3vodafone-idea-elon-musk-1704677692353758122606.jpg',
-        review: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-    }
-];
+let items = [];
 
 let currentIndex = 0;
 const itemsPerView = 3;
@@ -251,8 +145,33 @@ function startAutoPlay() {
     }, 3000);
 }
 
+function getAllPublicReviews(){
+    fetch('https://reviews.stage.n-framescorp.com/get-reviews', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({}),
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            items = data;
+            return renderItems();
+        })
+        .then(() => {
+            startAutoPlay();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     init();
-    renderItems();
-    startAutoPlay()
+    getAllPublicReviews();
 });

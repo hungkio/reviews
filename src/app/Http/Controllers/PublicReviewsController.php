@@ -32,9 +32,7 @@ class PublicReviewsController extends Controller
             $formattedResults[] = $formattedResult;
         }
 
-        dd($formattedResults);
-
-        echo json_encode($formattedResults);
+        return json_encode($formattedResults);
 
     }
 }
