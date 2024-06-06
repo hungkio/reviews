@@ -17,7 +17,7 @@ class SendEmailReview extends Command
      * @var string
      */
     protected $signature = 'email:send-review-requests';
-
+    
     /**
      * The console command description.
      *
@@ -30,112 +30,62 @@ class SendEmailReview extends Command
      */
     public function handle()
     {
-        $accounts = DB::table('accounts')->get();
+        $payments = DB::table('payments')
+            ->where('status_email', 'Scheduled')
+            ->orderBy('customer')
+            ->get()
+            ->groupBy('customer');
+        foreach ($payments as $customer_id => $payment_value) {
+            $customer = DB::table('customers')
+                ->select('customers.customers_id', 'customers.email', 'customers.name', 'customers.phone', 'customers.address', 'customers.account_id', 'accounts.*')
+                ->join('accounts', 'customers.account_id', '=', 'accounts.accounts_id')
+                ->where('customers.customers_id', $customer_id)
+                ->first();
 
-        foreach ($accounts as $account) {
-            $frequency = $account->frequency;
-            $customers = DB::table('customers')
-                            ->where('account_id', $account->accounts_id)
-                            ->distinct('customers_id')
-                            ->get();
-            $reviewRequests = DB::table('review_request')
-                                ->where('account_id', $account->accounts_id)
-                                ->orderByDesc('record_number')
-                                ->get();
 
-            foreach ($customers as $customer) {
-                $payments = DB::table('payments')->where('customers_id', $customer->customers_id)->count();
-                
-                switch ($frequency) {
-                    case 0:
-                    // case 'Mỗi khoản thanh toán':
-                        $this->sendEmail($customer, $reviewRequests);
-                        break;
-
-                    case 1:
-                    // case 'Chỉ thanh toán lần đầu':
-                        if ($payments == 1) {
-                            Log::info('1');
-                            $this->sendEmail($customer, $reviewRequests);
-                        }
-                        break;
-
-                    // case 'Bỏ qua khoản thanh toán đầu tiên, gửi từ lần thứ hai trở đi':
-                    case 2:
-                        if ($payments > 1) {
-                            Log::info('2');
-                            $this->sendEmail($customer, $reviewRequests);
-                        }
-                        break;
-
-                    case 3:
-                    // case 'Bỏ qua hai khoản thanh toán đầu tiên, gửi từ lần thanh toán thứ ba trở đi':
-                        if ($payments > 2) {
-                            Log::info('3');
-                            $this->sendEmail($customer, $reviewRequests);
-                        }
-                        break;
-
-                    // case 'Thanh toán thay thế':
-                    case 4:
-                        Log::info('4');
-                        // if ($payments % 2 == 0) {
-                        //     $this->sendEmail($customer);
-                        // }
-                        break;
-
-                    // case 'Bỏ qua khách hàng khi đánh giá đã được gửi trước đó':
-                    case 5:
-                        if ($this->hasNotReceivedReviewRequest($customer)) {
-                            $this->sendEmail($customer, $reviewRequests);
-                        }
-                        break;
+            if ($customer) {
+                $reviewRequests = DB::table('review_request')
+                    ->where('account_id', $customer->account_id)
+                    ->orderByDesc('record_number')
+                    ->get();
+                foreach ($payment_value as $payment) {
+                    $this->sendEmail($customer, $reviewRequests, $payment);
                 }
             }
-
         }
     }
 
-    private function sendEmail($customer , $reviewRequests)
+    private function sendEmail($customer, $reviewRequests, $payment)
     {
         $email = $customer->email;
         $now = Carbon::now()->format('Y-m-d');
-        
-        for($i = 0 ; $i < count($reviewRequests) ; $i++){
-            $created_at = new Carbon($customer->created_at);
+
+        for ($i = 0; $i < count($reviewRequests); $i++) {
+            $created_at = new Carbon($payment->created_at);
             $interval_date = 0;
-            if($i == 0 ){
+            if ($i == 0) {
                 $interval_date = $reviewRequests[0]->interval_date;
-            }else{
-                $interval_date = $reviewRequests[$i]->interval_date + $reviewRequests[$i - 1]->interval_date;
+            } else {
+                $interval_date = 0;
+                for ($j = 0; $j <= $i; $j++) {
+                    $interval_date += $reviewRequests[$j]->interval_date;
+                }
             }
             $date_send = $created_at->copy()->addDays($interval_date)->format('Y-m-d');
-            Log::info('now');
-            Log::info(json_encode($now));
-            if(($now == $date_send) && $email){
+            if (($now == $date_send) && $email) {
                 $details = [
                     'type' => 'review',
                     'data' => $customer,
-                    'rating_style' => isset($reviewRequests[$i]->rating_style) ? $reviewRequests[$i]->rating_style : 'stars'
+                    'payment' => $payment,
+                    'reviewRequests' => isset($reviewRequests[$i]) ? $reviewRequests[$i] : []
                 ];
+                
                 Mail::to($email)->send(new ExampleMail($details));
-                DB::table('customers')->where('id' , $customer->id)->update([
+                DB::table('payments')->where('id' , $payment->id)->update([
                     'status_email' => 'Sent',
                     'updated_at' => Carbon::now()
                 ]);
             }
         }
-
     }
-
-
-    private function hasNotReceivedReviewRequest($customer)
-    {
-        $reviewRequest = DB::table('reviews')
-                            ->where('customers_id', $customer->customers_id)
-                            ->first();
-
-        return is_null($reviewRequest);
-    }
-
 }

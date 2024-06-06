@@ -8,6 +8,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -60,5 +61,36 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    public function getPublicReviews()
+    {
+        $results = DB::table('reviews')
+            ->where('status', 1)
+            ->where('order', 1)
+            ->get();
+        dd($results);
+
+        $formattedResults = [];
+
+        foreach ($results as $result) {
+            $user = DB::table('customers')
+                ->where('customers_id', $result->customer_id)
+                ->first();
+            $formattedResult = [
+                'name' => $user->name,
+                'star' => $result->star,
+                'social' => $result->source,
+                'avatar' => 'https://pbs.twimg.com/profile_images/1618575477781807105/iDuRlqTe_400x400.jpg',
+                'review' => $result->review
+            ];
+
+            $formattedResults[] = $formattedResult;
+        }
+
+        dd($formattedResults);
+
+        echo json_encode($formattedResults);
+
     }
 }

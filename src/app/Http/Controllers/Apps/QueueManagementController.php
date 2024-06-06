@@ -34,7 +34,7 @@ class QueueManagementController extends Controller
                 'name' => $customer_record->name,
                 'email' => $customer_record->email,
                 'payment_intent_id' => $payment_record->payment_intent_id,
-                'status' => $payment_record->status,
+                'status' => $payment_record->status_email,
                 'created_at' => Carbon::parse($payment_record->created_at)->format('d/m/Y'),
             ];
             array_push($result, $data);
@@ -47,7 +47,7 @@ class QueueManagementController extends Controller
         try {
         DB::table('payments')
             ->where('id',$data['id'] )
-            ->update(['status' => $data['status']]);
+            ->update(['status_email' => $data['status']]);
             return response()->json(['message' => 'Successfully updated', 'code' => 200], 200);
         }catch (Exception $e) {
             print_r($e);

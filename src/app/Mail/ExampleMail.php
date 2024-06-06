@@ -35,9 +35,13 @@ class ExampleMail extends Mailable
                 ->subject('Stripe')
                 ->with($this->details);
         }else if($this->details['type'] == 'review'){
+            $email_subject = $this->details['reviewRequests']->email_subject ?? 'Review'; 
+            Log::info($email_subject);
+            Log::info(json_encode($this->details));
             return $this->view('mails.rating')
-                ->subject('Review')
+                ->subject($email_subject)
                 ->with($this->details);
+
         }
 
     }

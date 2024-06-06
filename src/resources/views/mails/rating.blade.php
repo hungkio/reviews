@@ -12,13 +12,18 @@
             font-family: 'Montserrat', sans-serif !important;
         }
 
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
         .rating {
             display: flex;
             flex-direction: row-reverse;
             justify-content: center;
             align-items: center;
             padding-right: 15px;
-            font-size: 1.5rem
+            font-size: 1.5rem;
         }
 
         .rating label {
@@ -31,77 +36,137 @@
             margin-top: 3px;
         }
 
+        .container {
+            width: 100%;
+            height: auto;
+            padding: 50px 0;
+        }
+
+        .form-wrapper {
+            width: 100%;
+            background: white;
+            max-width: 568px;
+            height: auto;
+            margin: 0 auto;
+            text-align: center;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+            padding: 20px 15px;
+            border-radius: 10px;
+        }
+
+        .form-wrapper h1 {
+            color: #443c68;
+        }
+
+        .feedback-wrapper {
+            width: 100%;
+            text-align: left;
+        }
+
+        .feedback-wrapper h3 {
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .feedback-wrapper textarea {
+            font-family: 'Montserrat', sans-serif;
+            width: 100%;
+            height: 120px;
+            margin-bottom: 20px;
+            margin-top: 10px;
+            padding: 15px;
+            border: none;
+            background-color: #0e77ff1a;
+            outline: none;
+            border-radius: 5px;
+            resize: vertical;
+            font-size: 0.7rem;
+            box-sizing: border-box;
+        }
+
+        .btn-submit {
+            font-family: 'Montserrat', sans-serif;
+            padding: 10px 55px;
+            border: none;
+            border-radius: 20px;
+            background-color: #0e77ff;
+            color: white;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            .rating {
+                font-size: 1rem;
+                padding-right: 0;
+            }
+
+            .rating label {
+                font-size: 1rem;
+            }
+
+            .form-wrapper {
+                padding: 15px;
+                width: auto !important;
+            }
+
+            .feedback-wrapper textarea {
+                font-size: 0.8rem;
+                height: 100px;
+            }
+
+            .btn-submit {
+                padding: 10px 30px;
+                font-size: 0.7rem;
+            }
+        }
     </style>
 </head>
 <?php
 $maxStars = 5;
 $emojis = ["😍", "😊", "😐", "😟", "😡"];
+$background_color = isset($data->color) ? $data->color : "rgb(14, 119, 255, 0.1)";
+$email_body = isset($reviewRequests->email_body) ? $reviewRequests->email_body : "";
+$rating_style = isset($reviewRequests->rating_style) ? $reviewRequests->rating_style : "";
 ?>
 
 <body>
-<form action="{{ route('webform.show') }}" method="GET" style="width: 100%;
-        background: white;
-        max-width: 568px;
-        height: auto;
-        margin: 0 auto;
-        text-align: center;
-       box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-        padding: 20px 15px;
-        border-radius: 10px">
-    <input type="hidden" name="payment_id" value="{{$data->payment_intent_id ?? ''}}">
-    <h1 style="color: #443c68">Rate Us</h1>
-    <p style="font-size: 14px; font-weight: 500">How was your experience using our application? Your rating matter!</p>
-
-    <div class="rating">
-        <?php
-        if ($rating_style == 'stars') {
-            for ($i = 1; $i <= $maxStars; $i++) {
-                echo '<div class="rating">';
-                for ($j = 1; $j <= $i; $j++) {
-                    echo '<label for="star' . $i . '" title="' . $i . ' star">&#9733;</label>';
+<div class="container" style="background-color: <?php echo $background_color; ?>;">
+    <form action="{{ route('webform.show') }}" method="GET" class="form-wrapper">
+        <input type="hidden" name="payment_id" value="{{$payment->payment_intent_id ?? ''}}">
+        <input type="hidden" name="email_body" value="{{$email_body ?? ''}}">
+        <input type="hidden" name="background_color" value="{{$background_color ?? ''}}">
+        <h1>Rate Us</h1>
+        <?php echo $email_body; ?>
+        <div class="rating" style="justify-content: center;">
+            <?php
+            if ($rating_style == 'stars') {
+                for ($i = 1; $i <= $maxStars; $i++) {
+                    echo '<div class="rating">';
+                    echo '<input type="radio" id="star' . $i . '" name="star" value="' . $i . '">';
+                    for ($j = 1; $j <= $i; $j++) {
+                        echo '<label for="star' . $i . '" title="' . $i . ' star">&#9733;</label>';
+                    }
+                    echo '</div>';
                 }
-                echo '<input type="radio" id="star' . $i . '" name="star" value="' . $i . '">';
-
-                echo '</div>';
+            } else {
+                for ($i = 1; $i <= $maxStars; $i++) {
+                    echo '<div class="rating">';
+                    echo '<input type="radio" id="star' . $i . '" name="star" value="' . $i . '">';
+                    echo '<label for="star' . $i . '" title="' . $i . ' star">' . $emojis[$i - 1] . '</label>';
+                    echo '</div>';
+                }
             }
-        } else {
-            for ($i = 1; $i <= $maxStars; $i++) {
-                echo '<div class="rating">';
-                echo '<label for="star' . $i . '" title="' . $i . ' star">' . $emojis[$i - 1] . '</label>';
-                echo '<input type="radio" id="star' . $i . '" name="star" value="' . $i . '">';
+            ?>
+        </div>
 
-                echo '</div>';
-            }
-        }
-        ?>
-    </div>
-
-    <div style="width: 100%; text-align: left">
-        <h3 for="review" style="text-align: left; font-weight: 600">Feedback:</h3>
-        <textarea id="review" placeholder="Enter your feedback" name="review" rows="4" cols="50" style="    font-family: 'Montserrat', sans-serif;
-    width: 100%;
-    height: 120px;
-    margin-bottom: 20px;
-    margin-top: 10px;
-    padding: 15px;
-    border: none;
-    background-color: #e9ecf1c4;
-    outline: none;
-    border-radius: 5px;
-    resize: vertical;
-    font-size: 0.7rem;
-    box-sizing: border-box;"></textarea><br>
-    </div>
-    <button style="font-family: 'Montserrat', sans-serif;
-    padding: 10px 55px;
-    border: none;
-    border-radius: 20px;
-    background-color: #0e77ff;
-    color: white;
-    font-size: 0.8rem;
-    cursor: pointer;" class="btn-submit" type="submit">Submit
-    </button>
-</form>
+        <div class="feedback-wrapper">
+            <h3 for="review">Feedback:</h3>
+            <textarea id="review" placeholder="Enter your feedback" name="review" rows="4" cols="50"></textarea><br>
+        </div>
+        <button class="btn-submit" type="submit">Submit</button>
+    </form>
+</div>
 </body>
 
 </html>
