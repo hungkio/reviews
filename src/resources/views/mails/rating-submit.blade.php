@@ -132,6 +132,7 @@ $rating_style = 'stars';
 <form action="{{ route('webform.store') }}" method="POST" enctype="multipart/form-data" class="form-wrapper">
         @csrf    
         <input type="hidden" name="payment_id" value="{{$payment_id ?? ''}}">
+        <input type="hidden" name="payment_intent_id" value="{{$payment_intent_id ?? ''}}">
         <h1>Rate Us</h1>
         <?php echo $email_body; ?>
         <div class="rating">

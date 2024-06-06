@@ -213,7 +213,7 @@
                 showLoading()
                 $.ajax({
                     url: '/send-mail',
-                    data: {'type': type},
+                    data: {'type': type , 'id': id},
                     method: 'POST',
                     headers: {
                         'X-CSRF-Token': csrfToken

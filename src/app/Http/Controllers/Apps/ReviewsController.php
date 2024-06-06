@@ -112,12 +112,13 @@ class ReviewsController extends Controller
         $data = $request->all();
 
         $payment_id = $data['payment_id'];
+        $payment_intent_id = $data['payment_intent_id'];
 
         $payment = DB::table('customers')
             ->join('payments', 'customers.customers_id', 'payments.customer')
             ->join('accounts', 'customers.account_id', '=', 'accounts.accounts_id')
             ->join('setting_review_destination', 'customers.account_id', '=', 'setting_review_destination.account_id')
-            ->where('payments.payment_intent_id', $payment_id)
+            ->where('payments.payment_intent_id', $payment_intent_id)
             ->select(
                 'customers.email',
                 'customers.name',
@@ -148,6 +149,11 @@ class ReviewsController extends Controller
         ];
         try {
             DB::table('reviews')->insert($data_insert);
+            DB::table('payments')->where('id' , $payment_id)->update([
+                'status_email' => 'Reviews',
+                'updated_at' => Carbon::now()
+            ]);
+            
             if ($data['star'] > 3 && isset($payment->url)) {
             } else {
                 $details = [
