@@ -17,7 +17,7 @@ return new class extends Migration
                 'Scheduled',
                 'Sent',
                 'Canceled',
-                'Reviews',
+                'Reviewed',
                 'Opened',
                 'Delivered',
                 'Unsubscribed'
