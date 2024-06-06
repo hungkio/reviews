@@ -125,7 +125,7 @@
 <?php
 $maxStars = 5;
 $emojis = ["😍", "😊", "😐", "😟", "😡"];
-$background_color = "rgb(14, 119, 255, 0.1)";
+$background_color = isset($data->color) ? $data->color : "rgb(14, 119, 255, 0.1)";
 $email_body = isset($reviewRequests->email_body) ? $reviewRequests->email_body : "";
 $rating_style = isset($reviewRequests->rating_style) ? $reviewRequests->rating_style : "";
 ?>
