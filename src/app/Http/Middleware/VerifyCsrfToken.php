@@ -14,6 +14,8 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         //
         'login',
-        'get-reviews'
+        'get-reviews',
+        'get-overview-reviews',
+        '/webhook_endpoints'
     ];
 }
