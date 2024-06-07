@@ -16,18 +16,18 @@ class StripeController extends Controller
     //
     public function getDataStripe(){
         $json = file_get_contents('php://input');
-        $payload = json_decode($json, true);
+        $paymentData = json_decode($json, true);
 
-        $paymentData = json_decode($payload);
+//        $paymentData = json_decode($payload);
         if ($paymentData && isset($paymentData->data) && isset($paymentData->data->object)) {
             $data = $paymentData->data;
             $object = $data->object;
-        
+
             $account_id = $paymentData->account ?? null;
             $payment_id = $object->id ?? null;
             $customer_id = $object->customer ?? null;
-        
-            
+
+
             $stripe = new \Stripe\StripeClient('sk_test_51Oyz3vHGEde3YLOc00eCULJJXYHWAzCN3B0QYN54DpCOBBTxUMu5BnlUJfb1WvOC6dk9SfdEwHbpUJ45aoJuRXwT00TwqVF7Zl');
             try {
                 $customers = $stripe->customers->retrieve($customer_id, [], ['stripe_account' => $account_id]);
@@ -36,7 +36,7 @@ class StripeController extends Controller
                 $this->insertAccount($accounts);
                 $this->insertCustomers($customers, $account_id);
                 $this->insertPayment($paymentData, $object, $data, $customer_id, $account_id);
-            
+
             } catch(\UnexpectedValueException $e) {
                 print_r($e);
             } catch(\Stripe\Exception\SignatureVerificationException $e) {
@@ -47,7 +47,7 @@ class StripeController extends Controller
     }
 
     public function insertPayment($paymentData, $object, $data, $customer_id,$account_id){
-        
+
         try {
             $count_payment = DB::table('payments')
                                 ->where('customer', $customer_id)
@@ -57,8 +57,8 @@ class StripeController extends Controller
                                 ->addSelect('frequency')
                                 ->first();
             $status_email = null;
-            if (!$frequency || ($frequency == 1 && $count_payment == 0) || 
-                ($frequency == 2 && $count_payment >= 1) || 
+            if (!$frequency || ($frequency == 1 && $count_payment == 0) ||
+                ($frequency == 2 && $count_payment >= 1) ||
                 ($frequency == 3 && $count_payment >= 2)) {
                 $status_email = 'Scheduled';
             }
@@ -76,7 +76,7 @@ class StripeController extends Controller
                     $status_email = 'Scheduled';
                 }
             }
-           
+
             $data_insert = [
                 'account_id' => isset($paymentData->account) ? $paymentData->account : null,
                 'customers_id' => $customer_id,
@@ -135,7 +135,7 @@ class StripeController extends Controller
             print_r($e);
         }
     }
-    
+
     public function insertCustomers($customers, $account_id){
         try {
             $check_customers_exits = DB::table('customers')

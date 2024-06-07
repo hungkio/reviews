@@ -314,7 +314,8 @@
         window.onload = updatePreview;
 
         function submitForm() {
-            if($('#list-template').find('.button-template').length == 4){
+            const action = $("#submit").attr('data-action');
+            if($('#list-template').find('.button-template').length == 4 && action == 'create'){
                 return;
             }
             button.setAttribute("data-kt-indicator", "on");
@@ -349,7 +350,7 @@
             }
             const interval_type = $("#interval-type").val();
             const template_id = $("#template_id").val();
-            const action = $("#submit").attr('data-action');
+
             data_send.id = template_id;
             data_send.interval_date = interval_date;
             data_send.interval_type = interval_type;
