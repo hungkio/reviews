@@ -85,15 +85,15 @@ function getAllPublicReviews(){
         headers: {
             'Content-Type': 'application/json'
         },
-        body: '',
+        body: null,
     })
         .then(response => response.json())
         .then(data => {
-            console.log('success:', data);
+            // console.log('success:', data);
             return renderReviews(data);
         })
         .catch(error => {
-            console.error('Error:', error);
+            // console.error('Error:', error);
         });
 }
 

@@ -92,7 +92,7 @@ function getOverviewReviews(){
         headers: {
             'Content-Type': 'application/json'
         },
-        body: '',
+        body: null,
     })
         .then(response => response.json())
         .then(data => {
