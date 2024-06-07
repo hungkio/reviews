@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 //get public reviews
 Route::post('get-reviews', [PublicReviewsController::class, 'getPublicReviews']);
+Route::post('get-overview-reviews', [PublicReviewsController::class, 'getOverviewReviews']);
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])

@@ -23,7 +23,7 @@
     @endsection
 
     <div class="card">
-        <a href="javascript:;" onclick="getAllPublicReviews()" class="btn btn-success">Lấy public reviews</a>
+{{--        <a href="javascript:;" onclick="getAllPublicReviews()" class="btn btn-success">Lấy public reviews</a>--}}
         <!--begin::Card body-->
         <div class="card-body py-4">
             <div class="row fv-row">
@@ -370,17 +370,32 @@
             }
 
             function getAllPublicReviews(){
-                $.ajax({
-                    url: '/get-reviews',
-                    data: "",
-                    method: 'POST',
-                    success: function (res) {
-                        console.log('success:', res)
-                    },
-                    error: function (err) {
-                        console.log(err)
-                    }
-                })
+                // fetch('/get-reviews', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/x-www-form-urlencoded'
+                //     },
+                //     body: ""
+                // })
+                //     .then(response => response.json())
+                //     .then(data => {
+                //         console.log('success:', data, typeof data);
+                //     })
+                //     .catch(error => {
+                //         console.log('error:', error);
+                //     });
+
+                // $.ajax({
+                //     url: '/get-reviews',
+                //     data: "",
+                //     method: 'POST',
+                //     success: function (res) {
+                //         console.log('success:', res)
+                //     },
+                //     error: function (err) {
+                //         console.log(err)
+                //     }
+                // })
             }
 
             function alertError(){

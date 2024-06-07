@@ -18,7 +18,7 @@ class ReviewsController extends Controller
         $get_account_id = Auth::user()->account_id;
 
         $result = DB::table('reviews')
-            ->where('account_id',$get_account_id )
+            ->where('account_id', $get_account_id)
             ->orderByDesc('order')
             ->get();
 
@@ -33,7 +33,7 @@ class ReviewsController extends Controller
             $customerData[$customer->customers_id] = ['name' => $customer->name, 'email' => $customer->email];
         }
 
-        $result = $result->map(function ($item, $key) use($customerData) {
+        $result = $result->map(function ($item, $key) use ($customerData) {
             $item->dateTime = $this->getDateTime($item->created_at);
             $item->userName = $customerData[$item->customer_id]['name'];
             return $item;
@@ -42,51 +42,53 @@ class ReviewsController extends Controller
         return view('pages/apps.manage.reviews.list', compact('result'));
     }
 
-    public function updateStatus(Request $request){
+    public function updateStatus(Request $request)
+    {
         $data = $request->all();
         try {
             DB::table('reviews')
                 ->where('id', $data['id'])
                 ->update(['status' => $data['status']]);
             return response()->json(['message' => 'Successfully updated', 'code' => 200], 200);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             print_r($e);
             return response()->json(['message' => 'Something went wrong', 'code' => 500], 200);
         }
     }
 
-    public function updateMultipleStatus(Request $request){
+    public function updateMultipleStatus(Request $request)
+    {
         try {
             $data = $request->all();
             DB::table('reviews')
                 ->whereIn('id', $data['review_ids'])
                 ->update(['status' => $data['status']]);
             return response()->json(['message' => 'Successfully updated', 'code' => 200], 200);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             print_r($e);
             return response()->json(['message' => 'Something went wrong', 'code' => 500], 200);
         }
     }
 
-    public function updateOrder(Request $request){
+    public function updateOrder(Request $request)
+    {
         $data = $request->all();
         try {
             $review = DB::table('reviews')
                 ->where('id', $data['id'])
                 ->first();
 
-            if($review->order == 1){
-                DB::table('reviews')->where('id', $data['id'])->update(['order'=> 0]);
-            }else{
-                DB::table('reviews')->where('id', $data['id'])->update(['order'=> 1]);
+            if ($review->order == 1) {
+                DB::table('reviews')->where('id', $data['id'])->update(['order' => 0]);
+            } else {
+                DB::table('reviews')->where('id', $data['id'])->update(['order' => 1]);
             }
 
             return response()->json(['message' => 'Successfully updated', 'code' => 200], 200);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             print_r($e);
             return response()->json(['message' => 'Something went wrong', 'code' => 500], 200);
         }
-
     }
 
     public function getDateTime($time)
@@ -103,20 +105,20 @@ class ReviewsController extends Controller
         }
         $daysDifference = $oldDateTime->diffInDays($currentDateTime);
         return $daysDifference . ' days ago';
-
     }
 
     public function insertReview(Request $request)
     {
-        $data= $request->all();
+        $data = $request->all();
 
         $payment_id = $data['payment_id'];
+        $payment_intent_id = $data['payment_intent_id'];
 
         $payment = DB::table('customers')
             ->join('payments', 'customers.customers_id', 'payments.customer')
             ->join('accounts', 'customers.account_id', '=', 'accounts.accounts_id')
             ->join('setting_review_destination', 'customers.account_id', '=', 'setting_review_destination.account_id')
-            ->where('payments.payment_intent_id', $payment_id)
+            ->where('payments.payment_intent_id', $payment_intent_id)
             ->select(
                 'customers.email',
                 'customers.name',
@@ -130,7 +132,9 @@ class ReviewsController extends Controller
             )
             ->first();
 
-
+        if (!$payment) {
+            return [];
+        }
         $payment->review = $data['review'];
         $payment->star = $data['star'];
 
@@ -145,18 +149,22 @@ class ReviewsController extends Controller
         ];
         try {
             DB::table('reviews')->insert($data_insert);
+            DB::table('payments')->where('id' , $payment_id)->update([
+                'status_email' => 'Reviews',
+                'updated_at' => Carbon::now()
+            ]);
+            
             if ($data['star'] > 3 && isset($payment->url)) {
-                return redirect()->away($payment->url);
-            }else{
+            } else {
                 $details = [
                     'type' => 'feedback',
                     'data' => $payment,
                 ];
-                if ($payment && isset($payment->reply_to_email) && isset($payment->send_notice)) {
+                if ($payment && isset($payment->reply_to_email) && isset($payment->send_notice) && $payment->send_notice) {
                     Mail::to($payment->reply_to_email)->send(new ExampleMail($details));
                 }
             }
-
+            return redirect()->away($payment->url);
         } catch (Exception $e) {
             print_r($e);
         }

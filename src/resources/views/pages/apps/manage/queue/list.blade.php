@@ -158,6 +158,14 @@
                         return 'UNSUBSCRIBED';
                     case 'Sent':
                         return 'SENT';
+                    case 'Scheduled':
+                        return 'SCHEDULED';
+                    case 'Reviewed':
+                        return 'REVIEWED';
+                    case 'Opened':
+                        return 'OPENED';
+                    case 'Delivered':
+                        return 'DELIVERED';
                     default:
                         return 'ALL'
                 }
@@ -205,12 +213,12 @@
                 showLoading()
                 $.ajax({
                     url: '/send-mail',
-                    data: {'type': type},
+                    data: {'type': type , 'id': id},
                     method: 'POST',
                     headers: {
                         'X-CSRF-Token': csrfToken
                     },
-                    success: function (res) {    
+                    success: function (res) {
                         alertSuccess('Sent successfully');
                         updateStatus(id, 'Sent', form);
                     },

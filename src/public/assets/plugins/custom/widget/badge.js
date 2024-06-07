@@ -60,15 +60,16 @@ function init() {
 
 function showBadge(data) {
     let stars = ''
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < Math.ceil(parseFloat(data.star)); i++) {
         stars += '<i class="fa fa-star" style="margin-right: 3px"></i>';
     }
+    const average_star = parseFloat(data.star).toFixed(1);
     var reviewHTML = `<div class="badge">
             <div class="badge-left">
                 <div style="width: 100%; height: 100%; background-color: black; color: white; display: flex;
                 flex-direction: column; text-align: center; border-radius: 8px;
                 justify-content: center; font-size: 1.3rem">
-                    ${data.star}
+                    ${average_star}
                 </div>
             </div>
             <div class="badge-right">
@@ -85,7 +86,25 @@ function showBadge(data) {
     get_elememt.innerHTML = reviewHTML;
 }
 
+function getOverviewReviews(){
+    fetch('https://reviews.stage.n-framescorp.com/get-overview-reviews', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: '',
+    })
+        .then(response => response.json())
+        .then(data => {
+            // console.log('success:', data);
+            return showBadge(data);
+        })
+        .catch(error => {
+            // console.error('Error:', error);
+        });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     init();
-    showBadge({star: '5.0', total: 223});
+    getOverviewReviews()
 });
