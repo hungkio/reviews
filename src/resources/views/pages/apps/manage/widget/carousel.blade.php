@@ -20,5 +20,6 @@
 </div>
 
 <script src="https://reviews.stage.n-framescorp.com/assets/plugins/custom/widget/carousel.js"></script>
+{{--<script src="{{ asset('assets/plugins/custom/widget/carousel.js') }}"></script>--}}
 </body>
 </html>

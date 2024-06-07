@@ -1,5 +1,3 @@
-let reviews = [];
-
 function initStyleAndScript() {
     var preconnect1 = document.createElement("link");
     preconnect1.rel = "preconnect";
@@ -53,7 +51,7 @@ function initLayout() {
     }
 }
 
-function renderReviews() {
+function renderReviews(reviews) {
     var columns = document.querySelectorAll('.col-md-4');
     var columnIndex = 0;
     reviews.forEach(function (review) {
@@ -87,21 +85,15 @@ function getAllPublicReviews(){
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({}),
+        body: '',
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            reviews = data;
-            return renderReviews();
-            // console.log('success:', data);
+            console.log('success:', data);
+            return renderReviews(data);
         })
         .catch(error => {
-            // console.error('Error:', error);
+            console.error('Error:', error);
         });
 }
 

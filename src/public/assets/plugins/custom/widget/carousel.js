@@ -112,11 +112,11 @@ function renderItems() {
         itemElement.innerHTML = `
                     <div class="item-content">
                         <div style="display: flex; align-items: center; width: 100%">
-                            <img src="https://i.insider.com/64c7a2c9048ff200190deaf5?width=800&format=jpeg&auto=webp" alt="Avatar" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px; object-fit: cover">
+                            <img src="${item.avatar}" alt="Avatar" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px; object-fit: cover">
                             <div style="flex-grow: 5; text-align: left">
                                 <p style="font-size: 1rem; font-weight: 500; color: black">${item.name}</h3>
                             </div>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg" alt="Avatar" style="width: 20px; height: 20px; border-radius: 50%; margin-right:  10px; object-fit: cover">
+                            <img src="${item.social}" alt="Avatar" style="width: 20px; height: 20px; border-radius: 50%; margin-right:  10px; object-fit: cover">
                         </div>
                         ${[...Array(5)].map((_, idx) => `<i class="fa fa-solid fa-star${idx < item.star ? '' : '-o'}"></i>`).join('')}
                     <p style="color: grey; font-size: 0.8rem">${item.review}</p>
@@ -151,15 +151,11 @@ function getAllPublicReviews(){
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({}),
+        body: "",
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
+            // console.error('success:', data);
             items = data;
             return renderItems();
         })
@@ -167,7 +163,7 @@ function getAllPublicReviews(){
             startAutoPlay();
         })
         .catch(error => {
-            console.error('Error:', error);
+            // console.error('Error:', error);
         });
 }
 

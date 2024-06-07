@@ -7,5 +7,6 @@
 <body>
 <div id="import_badge" style="width: 250px; height: 50px;"></div>
 <script src="https://reviews.stage.n-framescorp.com/assets/plugins/custom/widget/badge.js"></script>
+{{--<script src="{{ asset('assets/plugins/custom/widget/badge.js') }}"></script>--}}
 </body>
 </html>

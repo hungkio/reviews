@@ -1,5 +1,3 @@
-let reviews = [];
-
 function init() {
     var googleFontsLink = document.createElement('link');
     googleFontsLink.href = 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap';
@@ -118,19 +116,21 @@ function renderReview(active_review) {
     `;
 }
 
-let index = 1;
-let close = false;
+function setIntervalShowToast(reviews){
+    let index = 1;
+    let close = false;
 
-let interval = setInterval(() => {
-    if (index < reviews.length && !close) {
-        curent_review = reviews[index];
-        showToast(renderReview(curent_review));
-        index++;
-        if (index >= reviews.length) {
-            index = 0;
+    let interval = setInterval(() => {
+        if (index < reviews.length && !close) {
+            curent_review = reviews[index];
+            showToast(renderReview(curent_review));
+            index++;
+            if (index >= reviews.length) {
+                index = 0;
+            }
         }
-    }
-}, 3000);
+    }, 3000);
+}
 
 function showToast(htmlContent) {
     var toast = document.getElementById("toast");
@@ -150,17 +150,12 @@ function getAllPublicReviews(){
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({}),
+        body: ""
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            reviews = data;
-            return showToast(renderReview(reviews[0]));
+            showToast(renderReview(data[0]));
+            setIntervalShowToast(data);
             // console.log('success:', data);
         })
         .catch(error => {
