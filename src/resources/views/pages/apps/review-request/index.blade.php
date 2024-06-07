@@ -295,7 +295,7 @@
         });
         const content = quill.root.innerHTML;
 
-        quill.getModule('toolbar').addHandler('image', selectLocalImage);
+        // quill.getModule('toolbar').addHandler('image', selectLocalImage);
 
         document.getElementById('email-subject').addEventListener('input', updatePreview);
 
