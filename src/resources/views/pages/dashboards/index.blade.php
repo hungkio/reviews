@@ -26,53 +26,24 @@
                 <h3>Hey {{Auth::user()->name}}, Welcome to reviews</h3>
                 <span>Here's a quick overview of your account summary</span>
             </div>
-            <div class="row pt-4">
+            <div class="row pt-10">
+                @foreach($result as $key => $record)
                 <div class="col-md-4 col-lg-4 col-xl-4 col-xxl-4 col-12">
-                    <div class="rounded border p-10 w-100 bg-success">
-                        <h4>This month - April 2024</h4>
+                    <div class="rounded border p-10 w-100 shadow">
+                        <h4 class="{{$key == 0 ? 'text-success' : ($key == 1 ? 'text-primary' : 'text-warning')}}">{{$key == 0 ? 'This month' : ($key == 1 ? 'Last month' : '2 months ago')}} - {{$record['name']}}</h4>
                         <div class="row">
                             <div class="col-6">
-                                <h1>100</h1>
+                                <h1>{{$record['count_request_sent']}}</h1>
                                 <span>Request sent</span>
                             </div>
                             <div class="col-6">
-                                <h1>100</h1>
+                                <h1>{{$record['count_review_received']}}</h1>
                                 <span>Review received</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 col-lg-4 col-xl-4 col-xxl-4 col-12">
-                    <div class="rounded border p-10 w-100 bg-warning">
-                        <h4>Last month - March 2024</h4>
-                        <div class="row">
-                            <div class="col-6">
-                                <h1>100</h1>
-                                <span>Request sent</span>
-                            </div>
-                            <div class="col-6">
-                                <h1>100</h1>
-                                <span>Review received</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-lg-4 col-xl-4 col-xxl-4 col-12">
-                    <div class="rounded border p-10 w-100 bg-danger">
-                        <h4>2 months ago - February 2024</h4>
-                        <div class="row">
-                            <div class="col-6">
-                                <h1>100</h1>
-                                <span>Request sent</span>
-                            </div>
-                            <div class="col-6">
-                                <h1>100</h1>
-                                <span>Review received</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                @endforeach
             </div>
         </div>
     </div>
