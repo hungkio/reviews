@@ -48,7 +48,9 @@
 @include('partials/theme-mode/_init')
 
 @yield('content')
-
+@if(auth()->user())
+    @include('pages.apps.user-management.users.modals.edit-profile')
+@endif
 <!--begin::Javascript-->
 <!--begin::Global Javascript Bundle(mandatory for all pages)-->
 @foreach(getGlobalAssets() as $path)
@@ -71,6 +73,11 @@
 <!--end::Javascript-->
 
 <script>
+    $(function () {
+        var edit_profile = document.querySelector('#edit-profile');
+        new bootstrap.Modal(edit_profile);
+    })
+
     document.addEventListener('livewire:init', () => {
         Livewire.on('success', (message) => {
             toastr.success(message);

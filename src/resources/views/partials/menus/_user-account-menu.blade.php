@@ -93,6 +93,9 @@
     <div class="menu-item px-5 d-none">
         <a href="#" class="menu-link px-5">My Statements</a>
     </div>
+    <div class="menu-item px-5">
+        <a class="menu-link px-5" data-bs-toggle="modal" data-bs-target="#edit-profile">Edit profile</a>
+    </div>
     <!--end::Menu item-->
     <!--begin::Menu separator-->
     <div class="separator my-2"></div>
