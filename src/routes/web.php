@@ -61,7 +61,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ]);
     });
 
-    Route::post('/send-mail', [MailController::class, 'sendEmail'])->name('send-mail');
+    // Route::post('/send-mail', [MailController::class, 'sendEmail'])->name('send-mail');
     Route::get('/save-customer', [MailController::class, 'insertCustomers']);
     Route::get('/preview/wall', [WidgetManagementController::class, 'previewWall']);
     Route::get('/preview/badge', [WidgetManagementController::class, 'previewBadge']);
@@ -74,6 +74,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 });
 
+Route::get('/send-mail', [MailController::class, 'sendEmail'])->name('send-mail');
 Route::post('/webform/store', [ReviewsController::class, 'insertReview'])->name('webform.store');
 Route::post('/save-review', [ReviewRequestController::class, 'saveReview'])->name('save-review');
 Route::get('/webform/show', [MailController::class, 'show'])->name('webform.show');

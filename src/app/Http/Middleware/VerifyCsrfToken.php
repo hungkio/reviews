@@ -16,6 +16,7 @@ class VerifyCsrfToken extends Middleware
         'login',
         'get-reviews',
         'get-overview-reviews',
-        '/webhook_endpoints'
+        '/webhook_endpoints',
+        '/send-mail'
     ];
 }
