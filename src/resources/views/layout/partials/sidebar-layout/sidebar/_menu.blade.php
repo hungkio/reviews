@@ -79,6 +79,17 @@
                         </a>
                         <!--end:Menu link-->
                     </div>
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('manage.form.*') ? 'active' : '' }}" href="{{ route('manage.form.index') }}">
+							<span class="menu-bullet">
+								<span class="bullet bullet-dot"></span>
+							</span>
+                            <span class="menu-title">Form</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
                 </div>
                 <!--end:Menu link-->
                 <!--begin:Menu sub-->

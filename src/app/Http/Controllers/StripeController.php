@@ -57,17 +57,17 @@ class StripeController extends Controller
                                 ->addSelect('frequency')
                                 ->first();
             $status_email = null;
-            if (!$frequency || ($frequency == 1 && $count_payment == 0) ||
-                ($frequency == 2 && $count_payment >= 1) ||
-                ($frequency == 3 && $count_payment >= 2)) {
+            if (!$frequency || ($frequency->frequency == 1 && $count_payment == 0) ||
+                ($frequency->frequency == 2 && $count_payment >= 1) ||
+                ($frequency->frequency == 3 && $count_payment >= 2)) {
                 $status_email = 'Scheduled';
             }
 
-            if($frequency == 4){
+            if($frequency->frequency == 4){
                 //Xử lý thay thế data
             }
 
-            if($frequency == 5){
+            if($frequency->frequency == 5){
                 $count_payment = DB::table('payments')
                                 ->where('customer', $customer_id)
                                 ->where('status_email' , '=', 'Sent')

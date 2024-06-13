@@ -70,6 +70,13 @@ Breadcrumbs::for('manage.widget.index', function (BreadcrumbTrail $trail) {
     $trail->push('Widget', route('manage.widget.index'));
 });
 
+
+// Home > Dashboard > Manage > form
+Breadcrumbs::for('manage.form.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('manage.index');
+    $trail->push('Form', route('manage.form.index'));
+});
+
 // Home > Dashboard > Manage > Reviews
 Breadcrumbs::for('manage.reviews.index', function (BreadcrumbTrail $trail) {
     $trail->parent('manage.index');
