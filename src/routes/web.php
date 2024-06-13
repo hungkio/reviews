@@ -7,7 +7,6 @@ use App\Http\Controllers\Apps\QueueManagementController;
 use App\Http\Controllers\Apps\ReviewsController;
 use App\Http\Controllers\Apps\ReviewDestinationController;
 use App\Http\Controllers\Apps\WidgetManagementController;
-use App\Http\Controllers\Apps\FormManagementController;
 use App\Http\Controllers\Apps\MailController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\DashboardController;
@@ -46,12 +45,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/manage/queue', QueueManagementController::class);
         Route::post('/manage/queue/update-status', [QueueManagementController::class, 'updateStatus']);
         Route::resource('/manage/widget', WidgetManagementController::class);
-        Route::resource('/manage/form', FormManagementController::class);
+        Route::resource('/manage/form', StripeController::class);
         Route::resource('/manage/reviews', ReviewsController::class);
         Route::post('/manage/reviews/update-status', [ReviewsController::class, 'updateStatus']);
         Route::post('/manage/reviews/update-order', [ReviewsController::class, 'updateOrder']);
         Route::post('/manage/reviews/update-multiple-status', [ReviewsController::class, 'updateMultipleStatus']);
-        Route::post('/manage/form/save', [FormManagementController::class, 'saveInformation']);
+        Route::post('/manage/form/save', [StripeController::class, 'saveInformation']);
     });
 
 

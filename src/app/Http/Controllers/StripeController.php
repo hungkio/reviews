@@ -10,15 +10,164 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Services\PayUService\Exception;
 use Illuminate\Support\Facades\Password;
+use Ramsey\Uuid\Uuid;
 
 class StripeController extends Controller
 {
     //
-    public function getDataStripe(){
+    public function index()
+    {
+        return view('pages/apps.manage.form.index');
+    }
+
+    public function saveInformation(Request $request)
+    {
+        $username = $request->username;
+        $email = $request->email;
+        $account_id = $this->generateRandomString('acct_');
+        $payment_id = $this->generateRandomString('pi_');
+        $customer_id = $this->generateRandomString('cus_');
+        $event_id = $this->generateRandomString('evt_');
+        $currentTimestamp = Carbon::now()->timestamp;
+
+        $paymentData = (object) [
+            'id' => $event_id,
+            'object' => 'event',
+            'account' => $account_id,
+            'api_version' => '2023-10-16',
+            'created' => $currentTimestamp,
+            'data' => (object) [
+                'object' => (object) [
+                    'id' => $payment_id,
+                    'object' => 'payment_intent',
+                    'amount' => 600000,
+                    'amount_capturable' => 0,
+                    'amount_details' => (object) [
+                        'tip' => []
+                    ],
+                    'amount_received' => 600000,
+                    'application' => null,
+                    'application_fee_amount' => null,
+                    'automatic_payment_methods' => null,
+                    'canceled_at' => null,
+                    'cancellation_reason' => null,
+                    'capture_method' => 'automatic',
+                    'client_secret' => null,
+                    'confirmation_method' => 'automatic',
+                    'created' => 1711577095,
+                    'currency' => 'usd',
+                    'customer' => $customer_id,
+                    'description' => 'Payment for webhook',
+                    'invoice' => null,
+                    'last_payment_error' => null,
+                    'latest_charge' => 'ch_3Oz4aZIyTqf0e7cM0pIDkSLa',
+                    'livemode' => false,
+                    'metadata' => [],
+                    'next_action' => null,
+                    'on_behalf_of' => null,
+                    'payment_method' => 'pm_1Oz3NsIyTqf0e7cMEOzWLZhM',
+                    'payment_method_configuration_details' => null,
+                    'payment_method_options' => (object) [
+                        'card' => (object) [
+                            'installments' => null,
+                            'mandate_options' => null,
+                            'network' => null,
+                            'request_three_d_secure' => 'automatic'
+                        ]
+                    ],
+                    'payment_method_types' => ['card'],
+                    'processing' => null,
+                    'receipt_email' => null,
+                    'review' => null,
+                    'setup_future_usage' => null,
+                    'shipping' => null,
+                    'source' => null,
+                    'statement_descriptor' => 'payment',
+                    'statement_descriptor_suffix' => null,
+                    'status' => 'succeeded',
+                    'transfer_data' => null,
+                    'transfer_group' => null
+                ]
+            ],
+            'livemode' => false,
+            'pending_webhooks' => 0,
+            'request' => (object) [
+                'id' => 'req_XeXAb59TT1BSKW',
+                'idempotency_key' => '0d31a1f0-a69f-4f27-a8ff-c38d852e27d7'
+            ],
+            'type' => 'payment_intent.succeeded'
+        ];
+        $data = $paymentData->data;
+        $object = $data->object;
+        $customers  = (object) [
+            'id' => $customer_id,
+            'email' => $email,
+            'name' => $username,
+            'phone' => '+18006156435"',
+            'object' => 'customer',
+            'address' => 'event',
+            'balance' => 0.00,
+            'currency' => 'usd',
+            'default_source' => null,
+            'delinquent' => 0,
+            'description' => 'Customer to test payment',
+            'discount' => null,
+            'invoice_prefix' => '75640C26',
+            'invoice_settings' => 'event',
+            'metadata' => '[]',
+            'next_invoice_sequence' => 1.00,
+            'preferred_locales' => "[en-US]",
+            'shipping' => (object) [
+                "name" => "Vương Trần",
+                "phone" => "+18006156435",
+                "address" => (object) [
+                    "city" => "Waseca",
+                    "line1" => "111 North State Street",
+                    "line2" => "",
+                    "state" => "MN",
+                    "country" => "US",
+                    "postal_code" => "56093"
+                ]
+            ],
+            'tax_exempt' => 'none',
+            'test_clock' => null,
+        ];
+        $accounts = (object) [
+            'id' => $account_id,
+            'object' => "account",
+            'capabilities' => (object) [],
+            'charges_enabled' => 0,
+            'country' => 'US',
+
+            'default_currency' => 'usd',
+            'details_submitted' => '0',
+            'future_requirements' => (object) [],
+            'payouts_enabled' => 0,
+
+            'requirements' => (object) [],
+            'settings' => (object) [],
+            'type' => 'standard',
+        ];
+
+        $this->insertUsers($customers, $account_id);
+        $this->insertAccount($accounts);
+        $this->insertCustomers($customers, $account_id);
+        $this->insertPayment($paymentData, $object, $data, $customer_id, $account_id);
+        return response()->json(['message' => 'Successfully updated', 'code' => 200], 200);
+    }
+
+    function generateRandomString($prefix)
+    {
+        $unique_part = uniqid();
+        return "{$prefix}{$unique_part}";
+    }
+
+    public function getDataStripe()
+    {
         $json = file_get_contents('php://input');
         $paymentData = json_decode($json, true);
 
-//        $paymentData = json_decode($payload);
+        //        $paymentData = json_decode($payload);
         if ($paymentData && isset($paymentData->data) && isset($paymentData->data->object)) {
             $data = $paymentData->data;
             $object = $data->object;
@@ -36,46 +185,48 @@ class StripeController extends Controller
                 $this->insertAccount($accounts);
                 $this->insertCustomers($customers, $account_id);
                 $this->insertPayment($paymentData, $object, $data, $customer_id, $account_id);
-
-            } catch(\UnexpectedValueException $e) {
+            } catch (\UnexpectedValueException $e) {
                 print_r($e);
-            } catch(\Stripe\Exception\SignatureVerificationException $e) {
+            } catch (\Stripe\Exception\SignatureVerificationException $e) {
                 print_r($e);
             }
             return response()->json(['message' => 'Payment successfully saved'], 201);
         }
     }
 
-    public function insertPayment($paymentData, $object, $data, $customer_id,$account_id){
+    public function insertPayment($paymentData, $object, $data, $customer_id, $account_id)
+    {
 
         try {
             $count_payment = DB::table('payments')
-                                ->where('customer', $customer_id)
-                                ->count();
+                ->where('customer', $customer_id)
+                ->count();
             $frequency = DB::table('accounts')
-                                ->where('accounts_id',$account_id)
-                                ->addSelect('frequency')
-                                ->first();
+                ->where('accounts_id', $account_id)
+                ->value('frequency');
+
             $status_email = null;
-            if ((!$frequency || !$frequency->frequency) || ($frequency->frequency == 1 && $count_payment == 0) ||
-                ($frequency->frequency == 2 && $count_payment >= 1) ||
-                ($frequency->frequency == 3 && $count_payment >= 2)) {
+
+            if ( $frequency === null || $frequency == 0 ||
+                $frequency == 1 && $count_payment == 0 ||
+                $frequency == 2 && $count_payment >= 1 ||
+                $frequency == 3 && $count_payment >= 2
+            ) {
                 $status_email = 'Scheduled';
             }
-
-            if($frequency->frequency == 4){
-                //Xử lý thay thế data
+            if ($frequency == 4) {
+                // Xử lý thay thế data
             }
-
-            if($frequency->frequency == 5){
+            if ($frequency == 5) {
                 $count_payment = DB::table('payments')
-                                ->where('customer', $customer_id)
-                                ->where('status_email' , '=', 'Sent')
-                                ->count();
-                if(!$count_payment){
+                    ->where('customer', $customer_id)
+                    ->where('status_email', 'Sent')
+                    ->count();
+                if (!$count_payment) {
                     $status_email = 'Scheduled';
                 }
             }
+
 
             $data_insert = [
                 'account_id' => isset($paymentData->account) ? $paymentData->account : null,
@@ -136,13 +287,14 @@ class StripeController extends Controller
         }
     }
 
-    public function insertCustomers($customers, $account_id){
+    public function insertCustomers($customers, $account_id)
+    {
         try {
             $check_customers_exits = DB::table('customers')
-                                ->where('account_id', $account_id)
-                                ->where('customers_id', $customers->id)
-                                ->first();
-            if(!$check_customers_exits){
+                ->where('account_id', $account_id)
+                ->where('customers_id', $customers->id)
+                ->first();
+            if (!$check_customers_exits) {
                 $data_insert = [
                     'account_id' => isset($account_id) ? $account_id : null,
                     'customers_id' => isset($customers->id) ? $customers->id : null,
@@ -174,12 +326,13 @@ class StripeController extends Controller
             print_r($e);
         }
     }
-    public function insertAccount($accounts){
+    public function insertAccount($accounts)
+    {
         try {
             $check_accounts_exits = DB::table('accounts')
-                                ->where('accounts_id', $accounts->id)
-                                ->first();
-            if(!$check_accounts_exits){
+                ->where('accounts_id', $accounts->id)
+                ->first();
+            if (!$check_accounts_exits) {
                 $data_insert = [
                     'accounts_id' => isset($accounts->id) ? $accounts->id : null,
                     'object' => isset($accounts->object) ? $accounts->object : null,
@@ -203,12 +356,14 @@ class StripeController extends Controller
         }
     }
 
-    public function insertUsers($customers , $account_id){
+    public function insertUsers($customers, $account_id)
+    {
         try {
             $check_user_exits = DB::table('users')
-                                ->where('account_id', $account_id)
-                                ->first();
-            if(!$check_user_exits){
+                ->where('account_id', $account_id)
+                ->orWhere('email', $customers->email)
+                ->first();
+            if (!$check_user_exits) {
                 $random_password = Str::random(10);
                 $hashed_password = Hash::make($random_password);
 
@@ -221,7 +376,7 @@ class StripeController extends Controller
                     'email_verified_at' => Carbon::now(),
                 ];
                 DB::table('users')->insert($data_insert);
-                if(isset($customers->email)){
+                if (isset($customers->email)) {
                     $email = [
                         'email' => $customers->email,
                     ];
@@ -232,5 +387,4 @@ class StripeController extends Controller
             print_r($e);
         }
     }
-
 }
