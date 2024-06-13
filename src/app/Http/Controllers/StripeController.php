@@ -57,7 +57,7 @@ class StripeController extends Controller
                                 ->addSelect('frequency')
                                 ->first();
             $status_email = null;
-            if (!$frequency || ($frequency->frequency == 1 && $count_payment == 0) ||
+            if ((!$frequency || !$frequency->frequency) || ($frequency->frequency == 1 && $count_payment == 0) ||
                 ($frequency->frequency == 2 && $count_payment >= 1) ||
                 ($frequency->frequency == 3 && $count_payment >= 2)) {
                 $status_email = 'Scheduled';
@@ -83,12 +83,12 @@ class StripeController extends Controller
                 'object_id' => isset($paymentData->object) ? $paymentData->object : null,
                 'payment_intent_id' => isset($object->id) ? $object->id : null,
                 'object' => isset($object->object) ? $object->object : null,
-                'amount' => isset($object->amount) ? $object->amount : null,
+                'amount' => isset($object->amount) ? $object->amount : 0,
                 'amount_capturable' => isset($object->amount_capturable) ? $object->amount_capturable : null,
                 'amount_details' => isset($object->amount_details) ? json_encode($object->amount_details) : null,
                 'amount_received' => isset($object->amount_received) ? $object->amount_received : null,
                 'application' => isset($object->application) ? $object->application : null,
-                'currency' => isset($object->currency) ? $object->currency : null,
+                'currency' => isset($object->currency) ? $object->currency : '',
                 'customer' => isset($object->customer) ? $object->customer : null,
                 'description' => isset($object->description) ? $object->description : null,
                 'latest_charge' => isset($object->latest_charge) ? $object->latest_charge : null,
@@ -96,7 +96,7 @@ class StripeController extends Controller
                 'metadata' => isset($object->metadata) ? json_encode($object->metadata) : null,
                 'payment_method' => isset($object->payment_method) ? $object->payment_method : null,
                 'payment_method_types' => isset($object->payment_method_types) ? json_encode($object->payment_method_types) : null,
-                'status' => isset($object->status) ? $object->status : null,
+                'status' => isset($object->status) ? $object->status : '',
                 'request_id' => isset($object->id) ? $object->id : null,
                 'idempotency_key' => isset($object->idempotency_key) ? $object->idempotency_key : null,
                 'amount_details_tip' => isset($object->amount_details) ? json_encode($object->amount_details) : null,
