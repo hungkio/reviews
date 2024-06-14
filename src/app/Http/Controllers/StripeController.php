@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Services\PayUService\Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Ramsey\Uuid\Uuid;
 
@@ -24,7 +25,19 @@ class StripeController extends Controller
     {
         $username = $request->username;
         $email = $request->email;
-        $account_id = $this->generateRandomString('acct_');
+        $user = Auth::user();
+        if(!$user->account_id){
+            try {
+                $newAccountId = $this->generateRandomString('acct_');
+                DB::table('users')->where('id', $user->id)->update([
+                    'account_id' => $newAccountId
+                ]);
+                $user->account_id = $newAccountId;
+            } catch (Exception $e) {
+                print_r($e);
+            }
+        }
+        $account_id = $user->account_id ?? $this->generateRandomString('acct_');
         $payment_id = $this->generateRandomString('pi_');
         $customer_id = $this->generateRandomString('cus_');
         $event_id = $this->generateRandomString('evt_');
@@ -149,7 +162,7 @@ class StripeController extends Controller
             'type' => 'standard',
         ];
 
-        $this->insertUsers($customers, $account_id);
+        // $this->insertUsers($customers, $account_id);
         $this->insertAccount($accounts);
         $this->insertCustomers($customers, $account_id);
         $this->insertPayment($paymentData, $object, $data, $customer_id, $account_id);

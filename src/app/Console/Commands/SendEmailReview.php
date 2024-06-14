@@ -31,7 +31,7 @@ class SendEmailReview extends Command
     public function handle()
     {
         $payments = DB::table('payments')
-            ->where('status_email', 'Scheduled')
+            // ->where('status_email', 'Scheduled')
             ->orderBy('customer')
             ->get()
             ->groupBy('customer');
