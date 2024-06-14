@@ -32,12 +32,12 @@
         <tbody>
             @foreach ($sentEmails as $details)
                 <tr>
-                    <td>{{ $details['type'] }}</td>
-                    <td>{{ $details['data']->email }}</td>
-                    <td>{{ $details['data']->name }}</td>
-                    <td>{{ $details['payment']->id }}</td>
-                    <td>{{ $details['reviewRequests']->email_subject }}</td>
-                    <td>{{ $details['reviewRequests']->email_body }}</td>
+                    <td>{{ $details['type'] ?? ''}}</td>
+                    <td>{{ $details['data']->email ?? ''}}</td>
+                    <td>{{ $details['data']->name ?? ''}}</td>
+                    <td>{{ $details['payment']->id ?? ''}}</td>
+                    <td>{{ $details['reviewRequests']->email_subject ?? ''}}</td>
+                    <td>{{ $details['reviewRequests']->email_body ?? ''}}</td>
                 </tr>
             @endforeach
         </tbody>
