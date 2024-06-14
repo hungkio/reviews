@@ -29,7 +29,7 @@ class StripeController extends Controller
         $customer_id = $this->generateRandomString('cus_');
         $event_id = $this->generateRandomString('evt_');
         $currentTimestamp = Carbon::now()->timestamp;
-
+        $amount = rand(300000,600000);
         $paymentData = (object) [
             'id' => $event_id,
             'object' => 'event',
@@ -40,12 +40,12 @@ class StripeController extends Controller
                 'object' => (object) [
                     'id' => $payment_id,
                     'object' => 'payment_intent',
-                    'amount' => 600000,
+                    'amount' => $amount,
                     'amount_capturable' => 0,
                     'amount_details' => (object) [
                         'tip' => []
                     ],
-                    'amount_received' => 600000,
+                    'amount_received' => $amount,
                     'application' => null,
                     'application_fee_amount' => null,
                     'automatic_payment_methods' => null,
@@ -54,7 +54,7 @@ class StripeController extends Controller
                     'capture_method' => 'automatic',
                     'client_secret' => null,
                     'confirmation_method' => 'automatic',
-                    'created' => 1711577095,
+                    'created' => time(),
                     'currency' => 'usd',
                     'customer' => $customer_id,
                     'description' => 'Payment for webhook',
@@ -99,11 +99,13 @@ class StripeController extends Controller
         ];
         $data = $paymentData->data;
         $object = $data->object;
+        $cus_name = $this->randomName();
+        $cus_phone = $this->randomPhone();
         $customers  = (object) [
             'id' => $customer_id,
             'email' => $email,
             'name' => $username,
-            'phone' => '+18006156435"',
+            'phone' => $cus_phone,
             'object' => 'customer',
             'address' => 'event',
             'balance' => 0.00,
@@ -118,8 +120,8 @@ class StripeController extends Controller
             'next_invoice_sequence' => 1.00,
             'preferred_locales' => "[en-US]",
             'shipping' => (object) [
-                "name" => "Vương Trần",
-                "phone" => "+18006156435",
+                "name" => $cus_name,
+                "phone" => $cus_phone,
                 "address" => (object) [
                     "city" => "Waseca",
                     "line1" => "111 North State Street",
