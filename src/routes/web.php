@@ -76,7 +76,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 });
 
-Route::get('/send-mail', [MailController::class, 'sendEmail'])->name('send-mail');
+Route::get('/send-mail/{emailOrder?}', [MailController::class, 'sendEmail'])->name('send-mail');
 Route::post('/webform/store', [ReviewsController::class, 'insertReview'])->name('webform.store');
 Route::post('/save-review', [ReviewRequestController::class, 'saveReview'])->name('save-review');
 Route::get('/webform/show', [MailController::class, 'show'])->name('webform.show');

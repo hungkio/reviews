@@ -13,13 +13,15 @@ use Illuminate\Support\Facades\Log;
 class MailController extends Controller
 {
     // public function sendEmail(Request $request)
-    public function sendEmail()
+    public function sendEmail($emailOrder = null)
     {
         $payments = DB::table('payments')
-            ->where('status_email', 'Scheduled')
+            ->where('status_email', '<>' ,'Canceled')
+            ->whereNotNull('status_email')
             ->orderBy('customer')
             ->get()
             ->groupBy('customer');
+        $sentEmails = [];
         foreach ($payments as $customer_id => $payment_value) {
             $customer = DB::table('customers')
                 ->select('customers.customers_id', 'customers.email', 'customers.name', 'customers.phone', 'customers.address', 'customers.account_id', 'accounts.*')
@@ -28,38 +30,59 @@ class MailController extends Controller
                 ->first();
 
 
-            if ($customer) { 
+            if ($customer) {
                 $reviewRequests = DB::table('review_request')
                     ->where('account_id', $customer->account_id)
                     ->orderByDesc('record_number')
                     ->get();
                 foreach ($payment_value as $payment) {
-                    $this->handleSendEmail($customer, $reviewRequests, $payment);
+                    $sentEmails = array_merge($sentEmails, $this->handleSendEmail($customer, $reviewRequests, $payment, $emailOrder));
                 }
             }
         }
+        return view('mails.send-mail', ['sentEmails' => $sentEmails]);
     }
 
-    private function handleSendEmail($customer, $reviewRequests, $payment)
+    private function handleSendEmail($customer, $reviewRequests, $payment, $emailOrder = null)
     {
         $email = $customer->email;
+        $sentEmails = [];
+        if ($email) {
+            if ($emailOrder) {
+                if (isset($reviewRequests[$emailOrder - 1])) {
+                    $details = [
+                        'type' => 'review',
+                        'data' => $customer,
+                        'payment' => $payment,
+                        'reviewRequests' => $reviewRequests[$emailOrder - 1]
+                    ];
+                    Mail::to($email)->send(new ExampleMail($details));
+                    DB::table('payments')->where('id', $payment->id)->update([
+                        'status_email' => 'Sent',
+                        'updated_at' => Carbon::now()
+                    ]);
+                    $sentEmails[] = $details;
+                }
+            } else {
+                for ($i = 0; $i < count($reviewRequests); $i++) {
+                    $details = [
+                        'type' => 'review',
+                        'data' => $customer,
+                        'payment' => $payment,
+                        'reviewRequests' => isset($reviewRequests[$i]) ? $reviewRequests[$i] : []
+                    ];
 
-        for ($i = 0; $i < count($reviewRequests); $i++) {
-            if ($email) {
-                $details = [
-                    'type' => 'review',
-                    'data' => $customer,
-                    'payment' => $payment,
-                    'reviewRequests' => isset($reviewRequests[$i]) ? $reviewRequests[$i] : []
-                ];
-                
-                Mail::to($email)->send(new ExampleMail($details));
-                DB::table('payments')->where('id' , $payment->id)->update([
-                    'status_email' => 'Sent',
-                    'updated_at' => Carbon::now()
-                ]);
+                    Mail::to($email)->send(new ExampleMail($details));
+                    DB::table('payments')->where('id', $payment->id)->update([
+                        'status_email' => 'Sent',
+                        'updated_at' => Carbon::now()
+                    ]);
+                    $sentEmails[] = $details;
+                }
             }
         }
+        return $sentEmails;
+
     }
     public function show(Request $request)
     {
