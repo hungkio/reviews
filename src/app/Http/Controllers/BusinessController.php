@@ -58,7 +58,7 @@ class BusinessController extends Controller
         try {
             if (!$check_exits) {
                 $data_insert['created_at'] = Carbon::now();
-                DB::table('accounts')->insert($data_insert);
+                DB::table('accounts')->where('accounts_id', $user->account_id)->insert($data_insert);
             } else {
                 DB::table('accounts')->where('accounts_id', $user->account_id)->update($data_insert);
             }
