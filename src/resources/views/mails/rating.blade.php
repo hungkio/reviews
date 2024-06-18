@@ -20,10 +20,11 @@
         .rating {
             display: flex;
             flex-direction: row;
+            font-size: 1.5rem;
             justify-content: center!important;
             align-items: center!important;
-            padding-right: 15px;
-            font-size: 1.5rem;
+            width: 100%!important;
+            text-align: center!important
         }
 
         .rating label {
@@ -124,7 +125,7 @@
 </head>
 <?php
 $maxStars = 5;
-$emojis = ["😍", "😊", "😐", "😟", "😡"];
+$emojis = ["😡", "😟", "😐", "😊", "😍"];
 $background_color = isset($data->color) ? $data->color : "rgb(14, 119, 255, 0.1)";
 $email_body = isset($reviewRequests->email_body) ? $reviewRequests->email_body : "";
 $rating_style = isset($reviewRequests->rating_style) ? $reviewRequests->rating_style : "stars";
@@ -139,11 +140,11 @@ $rating_style = isset($reviewRequests->rating_style) ? $reviewRequests->rating_s
         <input type="hidden" name="background_color" value="{{$background_color ?? ''}}">
         <h1>Rate Us</h1>
         <?php echo $email_body; ?>
-        <div class="rating" style="justify-content: center;">
+        <div class="rating" style="justify-content: center!important; align-items: center!important; width: 100%!important; text-align: center!important">
             <?php
             if ($rating_style == 'stars') {
                 for ($i = 1; $i <= $maxStars; $i++) {
-                    echo '<div class="rating" style="justify-content: center!important;">';
+                    echo '<div class="rating" style="justify-content: center!important; align-items: center!important; width: 100%!important; text-align: center!important">';
                     echo '<input type="radio" id="star' . $i . '" name="star" value="' . $i . '">';
                     for ($j = 1; $j <= $i; $j++) {
                         echo '<label for="star' . $i . '" title="' . $i . ' star">&#9733;</label>';
@@ -152,7 +153,7 @@ $rating_style = isset($reviewRequests->rating_style) ? $reviewRequests->rating_s
                 }
             } else {
                 for ($i = 1; $i <= $maxStars; $i++) {
-                    echo '<div class="rating" style="justify-content: center!important;">';
+                    echo '<div class="rating" style="justify-content: center!important; align-items: center!important; width: 100%!important; text-align: center!important">';
                     echo '<input type="radio" id="star' . $i . '" name="star" value="' . $i . '">';
                     echo '<label for="star' . $i . '" title="' . $i . ' star">' . $emojis[$i - 1] . '</label>';
                     echo '</div>';

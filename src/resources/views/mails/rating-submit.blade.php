@@ -20,10 +20,11 @@
         .rating {
             display: flex;
             flex-direction: row;
+            font-size: 1.5rem;
             justify-content: center!important;
             align-items: center!important;
-            padding-right: 15px;
-            font-size: 1.5rem;
+            width: 100%!important;
+            text-align: center!important
         }
 
         .rating label {
@@ -135,11 +136,11 @@ $rating_style = isset($rating_style) ? $rating_style: "stars";
         <input type="hidden" name="payment_intent_id" value="{{$payment_intent_id ?? ''}}">
         <h1>Rate Us</h1>
         <?php echo $email_body; ?>
-        <div class="rating">
+        <div class="rating" style="justify-content: center!important; align-items: center!important; width: 100%!important; text-align: center!important">
             <?php
             if ($rating_style == 'stars') {
                 for ($i = 1; $i <= $maxStars; $i++) {
-                    echo '<div class="rating" style="justify-content: center!important;">';
+                    echo '<div class="rating" style="justify-content: center!important; align-items: center!important; width: 100%!important; text-align: center!important">';
                     echo '<input type="radio" id="star' . $i . '" name="star" value="' . $i . '" ' . ($star == $i ? 'checked' : '') . '>';
                     for ($j = 1; $j <= $i; $j++) {
                         echo '<label for="star' . $i . '" title="' . $i . ' star">&#9733;</label>';
@@ -148,7 +149,7 @@ $rating_style = isset($rating_style) ? $rating_style: "stars";
                 }
             } else {
                 for ($i = 1; $i <= $maxStars; $i++) {
-                    echo '<div class="rating" style="justify-content: center!important;">';
+                    echo '<div class="rating" style="justify-content: center!important; align-items: center!important; width: 100%!important; text-align: center!important">';
                     echo '<input type="radio" id="star' . $i . '" name="star" value="' . $i . '" ' . ($star == $i ? 'checked' : '') . '>';
                     echo '<label for="star' . $i . '" title="' . $i . ' star">' . $emojis[$i - 1] . '</label>';
                     echo '</div>';
