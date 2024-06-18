@@ -63,9 +63,9 @@
                             <td class="status text-nowrap">{{$record['status']}}</td>
                             <td class="text-nowrap">
                                 <div class="rounded">
-                                    <a href="javascript:;" onclick="updateStatus({{$record['id']}}, 'Cancel', this.parentElement.parentElement.parentElement)" class="btn btn-sm btn-light-primary">Cancel</a>
+                                    <a href="javascript:;" onclick="updateStatus({{$record['id']}}, 'Cancel', this.parentElement.parentElement.parentElement, true)" class="btn btn-sm btn-light-primary">Cancel</a>
                                     <a href="javascript:;" onclick="sendMail({{$record['id']}}, 'review', this.parentElement.parentElement.parentElement)" class="btn btn-sm btn-light-success">Send Now</a>
-                                    <a href="javascript:;" onclick="updateStatus({{$record['id']}}, 'Unsubscribe', this.parentElement.parentElement.parentElement)" class="btn btn-sm btn-light-warning">Unsubscribe</a>
+                                    <a href="javascript:;" onclick="updateStatus({{$record['id']}}, 'Unsubscribe', this.parentElement.parentElement.parentElement, true)" class="btn btn-sm btn-light-warning">Unsubscribe</a>
                                 </div>
                             </td>
                         </tr>
@@ -220,7 +220,7 @@
                     },
                     success: function (res) {
                         alertSuccess('Sent successfully');
-                        updateStatus(id, 'Sent', form);
+                        updateStatus(id, 'Sent', form, false);
                     },
                     error: function (err) {
                         console.log(err)
@@ -229,7 +229,7 @@
                 })
             }
 
-            function updateStatus(id, status, form){
+            function updateStatus(id, status, form, is_alert){
                 const status_update = status == 'Cancel' ? 'Canceled' : 'Unsubscribed';
                 showLoading()
                 $.ajax({
@@ -242,7 +242,9 @@
                     success: function (res) {
                         if(res.code == 200){
                             $(form).find('.status').first().text(status_update);
-                            alertSuccess('Updated successfully')
+                            if(is_alert){
+                                alertSuccess('Updated successfully')
+                            }
                         }else{
                             alertError();
                         }
