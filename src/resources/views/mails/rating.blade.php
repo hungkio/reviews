@@ -18,14 +18,11 @@
         }
 
         .rating {
-            display: flex;
-            flex-direction: row;
             font-size: 1.5rem;
-            justify-content: center!important;
-            align-items: center!important;
-            width: 100%!important;
-            text-align: center!important
-        }
+            align-items: center !important;
+            width: 100% !important;
+            text-align: center !important;
+            }
 
         .rating label {
             font-size: 1.5rem;
@@ -144,19 +141,15 @@ $rating_style = isset($reviewRequests->rating_style) ? $reviewRequests->rating_s
             <?php
             if ($rating_style == 'stars') {
                 for ($i = 1; $i <= $maxStars; $i++) {
-                    echo '<div class="rating" style="justify-content: center!important; align-items: center!important; width: 100%!important; text-align: center!important">';
-                    echo '<input type="radio" id="star' . $i . '" name="star" value="' . $i . '">';
+                    echo '<input type="radio" style="margin-left : 10px" id="star' . $i . '" name="star" value="' . $i . '">';
                     for ($j = 1; $j <= $i; $j++) {
                         echo '<label for="star' . $i . '" title="' . $i . ' star">&#9733;</label>';
                     }
-                    echo '</div>';
                 }
             } else {
                 for ($i = 1; $i <= $maxStars; $i++) {
-                    echo '<div class="rating" style="justify-content: center!important; align-items: center!important; width: 100%!important; text-align: center!important">';
-                    echo '<input type="radio" id="star' . $i . '" name="star" value="' . $i . '">';
+                    echo '<input type="radio" style="margin-left : 10px" id="star' . $i . '" name="star" value="' . $i . '">';
                     echo '<label for="star' . $i . '" title="' . $i . ' star">' . $emojis[$i - 1] . '</label>';
-                    echo '</div>';
                 }
             }
             ?>
