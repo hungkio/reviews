@@ -230,7 +230,7 @@
             }
 
             function updateStatus(id, status, form, is_alert){
-                const status_update = status == 'Cancel' ? 'Canceled' : 'Unsubscribed';
+                const status_update = status == 'Cancel' ? 'Canceled' : (status=='Sent' ? 'Sent' :'Unsubscribed');
                 showLoading()
                 $.ajax({
                     url: '/manage/queue/update-status',
