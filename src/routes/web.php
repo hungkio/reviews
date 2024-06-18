@@ -63,7 +63,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ]);
     });
 
-    // Route::post('/send-mail', [MailController::class, 'sendEmail'])->name('send-mail');
+    Route::post('/send-mail-queue', [MailController::class, 'sendEmailQueue'])->name('send-mail-queue');
     Route::get('/save-customer', [MailController::class, 'insertCustomers']);
     Route::get('/preview/wall', [WidgetManagementController::class, 'previewWall']);
     Route::get('/preview/badge', [WidgetManagementController::class, 'previewBadge']);
