@@ -124,4 +124,5 @@ class MailController extends Controller
             $email = $customer->email;
             Mail::to($email)->send(new ExampleMail($details));
         }
+    }
 }

@@ -152,15 +152,15 @@
 
             function getStatus(status){
                 switch (status) {
-                    case 'Cancel':
+                    case 'Canceled':
                         return 'CANCELLED';
-                    case 'Unsubscribe':
+                    case 'Unsubscribed':
                         return 'UNSUBSCRIBED';
                     case 'Sent':
                         return 'SENT';
                     case 'Scheduled':
                         return 'SCHEDULED';
-                    case 'Reviewed':
+                    case 'Reviews':
                         return 'REVIEWED';
                     case 'Opened':
                         return 'OPENED';
@@ -212,7 +212,7 @@
             function sendMail(id, type, form){
                 showLoading()
                 $.ajax({
-                    url: '/send-mail',
+                    url: '/send-mail-queue',
                     data: {'type': type , 'id': id},
                     method: 'POST',
                     headers: {
@@ -231,17 +231,18 @@
             }
 
             function updateStatus(id, status, form){
+                const status_update = status == 'Cancel' ? 'Canceled' : 'Unsubscribed';
                 showLoading()
                 $.ajax({
                     url: '/manage/queue/update-status',
-                    data: {'id': id, 'status': status},
+                    data: {'id': id, 'status': status_update},
                     method: 'POST',
                     headers: {
                         'X-CSRF-Token': csrfToken
                     },
                     success: function (res) {
                         if(res.code == 200){
-                            $(form).find('.status').first().text(status);
+                            $(form).find('.status').first().text(status_update);
                             alertSuccess('Updated successfully')
                         }else{
                             alertError();
@@ -256,27 +257,31 @@
                 })
             }
             function alertError(){
-                Swal.fire({
-                    text: "Sorry, looks like there are some errors detected, please try again.",
-                    icon: "error",
-                    buttonsStyling: false,
-                    confirmButtonText: "Ok, got it!",
-                    customClass: {
-                        confirmButton: "btn btn-primary"
-                    }
-                });
+                setTimeout(()=>{
+                    Swal.fire({
+                        text: "Sorry, looks like there are some errors detected, please try again.",
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                }, 500)
             }
 
             function alertSuccess(text){
-                Swal.fire({
-                    text: text,
-                    icon: 'success',
-                    buttonsStyling: false,
-                    confirmButtonText: "Ok",
-                    customClass: {
-                        confirmButton: "btn btn-primary"
-                    }
-                });
+                setTimeout(()=>{
+                    Swal.fire({
+                        text: text,
+                        icon: 'success',
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                }, 500)
             }
 
             function showLoading(){

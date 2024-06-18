@@ -19,6 +19,7 @@ class QueueManagementController extends Controller
 
         $get_data = DB::table('payments')
             ->where('account_id',$get_account_id )
+            ->orderBy('id', 'desc')
             ->get();
 
         $result = [];
