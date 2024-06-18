@@ -81,16 +81,15 @@
                         }else{
                             alertError();
                         }
-                        swal.close();
                     },
                     error: function (err) {
                         console.log(err);
-                        swal.close();
                         alertError()
                     }
                 })
             }
             function alertError(){
+                swal.close();
                 setTimeout(()=>{
                     Swal.fire({
                         text: "Sorry, looks like there are some errors detected, please try again.",
@@ -105,6 +104,7 @@
             }
 
             function alertSuccess(text){
+                swal.close();
                 setTimeout(()=>{
                     Swal.fire({
                         text: text,

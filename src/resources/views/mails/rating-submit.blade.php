@@ -124,7 +124,7 @@
 <?php
 $maxStars = 5;
 $emojis = ["😡", "😟", "😐", "😊", "😍"];
-$rating_style = 'stars';
+$rating_style = isset($rating_style) ? $rating_style: "stars";
 ?>
 
 <body>
@@ -139,7 +139,7 @@ $rating_style = 'stars';
             <?php
             if ($rating_style == 'stars') {
                 for ($i = 1; $i <= $maxStars; $i++) {
-                    echo '<div class="rating">';
+                    echo '<div class="rating" style="justify-content: center!important;">';
                     echo '<input type="radio" id="star' . $i . '" name="star" value="' . $i . '" ' . ($star == $i ? 'checked' : '') . '>';
                     for ($j = 1; $j <= $i; $j++) {
                         echo '<label for="star' . $i . '" title="' . $i . ' star">&#9733;</label>';
@@ -148,7 +148,7 @@ $rating_style = 'stars';
                 }
             } else {
                 for ($i = 1; $i <= $maxStars; $i++) {
-                    echo '<div class="rating">';
+                    echo '<div class="rating" style="justify-content: center!important;">';
                     echo '<input type="radio" id="star' . $i . '" name="star" value="' . $i . '" ' . ($star == $i ? 'checked' : '') . '>';
                     echo '<label for="star' . $i . '" title="' . $i . ' star">' . $emojis[$i - 1] . '</label>';
                     echo '</div>';

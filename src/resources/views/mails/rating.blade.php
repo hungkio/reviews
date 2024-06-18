@@ -127,12 +127,13 @@ $maxStars = 5;
 $emojis = ["😍", "😊", "😐", "😟", "😡"];
 $background_color = isset($data->color) ? $data->color : "rgb(14, 119, 255, 0.1)";
 $email_body = isset($reviewRequests->email_body) ? $reviewRequests->email_body : "";
-$rating_style = isset($reviewRequests->rating_style) ? $reviewRequests->rating_style : "";
+$rating_style = isset($reviewRequests->rating_style) ? $reviewRequests->rating_style : "stars";
 ?>
 
 <body>
 <div class="container" style="background-color: <?php echo $background_color; ?>;">
     <form action="{{ route('webform.show') }}" method="GET" class="form-wrapper">
+        <input type="hidden" name="rating_style" value="{{$rating_style ?? 'stars'}}">
         <input type="hidden" name="payment_id" value="{{$payment->payment_intent_id ?? ''}}">
         <input type="hidden" name="email_body" value="{{$email_body ?? ''}}">
         <input type="hidden" name="background_color" value="{{$background_color ?? ''}}">
@@ -142,7 +143,7 @@ $rating_style = isset($reviewRequests->rating_style) ? $reviewRequests->rating_s
             <?php
             if ($rating_style == 'stars') {
                 for ($i = 1; $i <= $maxStars; $i++) {
-                    echo '<div class="rating">';
+                    echo '<div class="rating" style="justify-content: center!important;">';
                     echo '<input type="radio" id="star' . $i . '" name="star" value="' . $i . '">';
                     for ($j = 1; $j <= $i; $j++) {
                         echo '<label for="star' . $i . '" title="' . $i . ' star">&#9733;</label>';
@@ -151,7 +152,7 @@ $rating_style = isset($reviewRequests->rating_style) ? $reviewRequests->rating_s
                 }
             } else {
                 for ($i = 1; $i <= $maxStars; $i++) {
-                    echo '<div class="rating">';
+                    echo '<div class="rating" style="justify-content: center!important;">';
                     echo '<input type="radio" id="star' . $i . '" name="star" value="' . $i . '">';
                     echo '<label for="star' . $i . '" title="' . $i . ' star">' . $emojis[$i - 1] . '</label>';
                     echo '</div>';

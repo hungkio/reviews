@@ -219,10 +219,8 @@
                             }
                             $(parent_form).attr('data-status',status == 1 ? 'publish' : 'unpublish');
                         }
-                        swal.close();
                     },
                     error: function (err) {
-                        swal.close();
                         alertError()
                         console.log(err)
                     }
@@ -263,10 +261,8 @@
                             }
                             alertSuccess(res.message);
                         }
-                        swal.close();
                     },
                     error: function (err) {
-                        swal.close();
                         alertError()
                         console.log(err)
                     }
@@ -359,10 +355,8 @@
                             })
                             alertSuccess(res.message);
                         }
-                        swal.close();
                     },
                     error: function (err) {
-                        swal.close();
                         alertError()
                         console.log(err)
                     }
@@ -399,6 +393,7 @@
             }
 
             function alertError(){
+                swal.close();
                 setTimeout(()=>{
                     Swal.fire({
                         text: "Sorry, looks like there are some errors detected, please try again.",
@@ -413,6 +408,7 @@
             }
 
             function alertSuccess(text){
+                swal.close();
                 setTimeout(()=>{
                     Swal.fire({
                         text: text,
