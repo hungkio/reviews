@@ -19,9 +19,9 @@
 
         .rating {
             display: flex;
-            flex-direction: row-reverse;
-            justify-content: center;
-            align-items: center;
+            flex-direction: row;
+            justify-content: center!important;
+            align-items: center!important;
             padding-right: 15px;
             font-size: 1.5rem;
         }
@@ -130,7 +130,7 @@ $rating_style = 'stars';
 <body>
 <div class="container" style="background-color: <?php echo $background_color; ?>;">
 <form action="{{ route('webform.store') }}" method="POST" enctype="multipart/form-data" class="form-wrapper">
-        @csrf    
+        @csrf
         <input type="hidden" name="payment_id" value="{{$payment_id ?? ''}}">
         <input type="hidden" name="payment_intent_id" value="{{$payment_intent_id ?? ''}}">
         <h1>Rate Us</h1>

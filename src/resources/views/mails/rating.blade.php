@@ -19,9 +19,9 @@
 
         .rating {
             display: flex;
-            flex-direction: row-reverse;
-            justify-content: center;
-            align-items: center;
+            flex-direction: row;
+            justify-content: center!important;
+            align-items: center!important;
             padding-right: 15px;
             font-size: 1.5rem;
         }
