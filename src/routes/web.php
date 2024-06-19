@@ -73,6 +73,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/review-request', ReviewRequestController::class);
     Route::post('/review-request/get-template-info', [ReviewRequestController::class, 'getTemplateInfo']);
     Route::post('/review-request/update', [ReviewRequestController::class, 'update']);
+    Route::post('/review-request/delete', [ReviewRequestController::class, 'delete']);
 
 });
 

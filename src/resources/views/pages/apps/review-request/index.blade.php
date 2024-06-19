@@ -119,12 +119,10 @@
                         </a>
                     @endforeach
                 </div>
-                @if(count($templates) < 4 )
-                    <a onclick="setNewForm()" href="javascript:;" class="btn btn-sm btn-primary btn-add">
-                        <i class="fa fa-plus"></i>
-                        <p>Add</p>
-                    </a>
-                @endif
+                <a onclick="setNewForm()" href="javascript:;" class="btn btn-sm btn-primary btn-add @if(count($templates) >= 4 ) d-none @endif">
+                    <i class="fa fa-plus"></i>
+                    <p>Add</p>
+                </a>
             </div>
             <input type="hidden" name="rating" id="rating" value="0">
             <div class="d-flex justify-content-between">
@@ -157,14 +155,25 @@
             </div>
             <div id="editor-container"></div>
 
-            <button onclick="submitForm()" data-action="create" type="button" class="btn btn-primary mt-10" id="submit">
-                    <span class="indicator-label">
-                        Save
-                    </span>
-                <span class="indicator-progress">
-                        Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                    </span>
-            </button>
+            <div class="row">
+                <div class="col-12 p-2" id="submit-btn">
+                    <button onclick="submitForm()" data-action="create" type="button" class="w-100 btn btn-primary mt-10" id="submit">
+                        <span class="indicator-label">
+                            Save
+                        </span>
+                            <span class="indicator-progress">
+                            Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+                </div>
+                <div class="col-6 p-2 d-none" id="delete-btn">
+                    <button onclick="deleteTemplate()" type="button" class="w-100 btn btn-danger mt-10" id="delete">
+                        <span class="indicator-label">
+                            Delete
+                        </span>
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="preview">
             <header>
@@ -263,6 +272,8 @@
             $("#template_id").val(0);
             $("#interval-date").val('');
             $("#email-subject").val('')
+            $("#delete-btn").addClass('d-none');
+            $("#submit-btn").addClass('col-12').removeClass('col-6');
             quill.root.innerHTML = '';
             updatePreview()
         }
@@ -312,6 +323,55 @@
         }
 
         window.onload = updatePreview;
+
+        function deleteTemplate(){
+            const template_id = $("#template_id").val();
+            if(template_id == 0){
+                return;
+            }
+
+            $.ajax({
+                url: "/review-request/delete",
+                data: {"template_id": template_id},
+                method: 'POST',
+                headers: {
+                    'X-CSRF-Token': csrfToken
+                },
+                success: function (res) {
+                    setNewForm();
+                    $(".btn-add").removeClass('d-none');
+                    $("#template_id").val(0);
+                    $('#list-template').find('.button-template').each(function (){
+                        if($(this).attr('data-template-id') == template_id){
+                            $(this).remove();
+                        }
+                    })
+                    Swal.fire({
+                        text: res.message,
+                        icon: res.code == 200 ? 'success' : 'warning',
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+
+                },
+                error: function (err) {
+                    console.log(err)
+                    button.removeAttribute("data-kt-indicator");
+                    Swal.fire({
+                        text: "Sorry, looks like there are some errors detected, please try again.",
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                }
+            })
+        }
 
         function submitForm() {
             const action = $("#submit").attr('data-action');
@@ -375,11 +435,13 @@
                                                 </a>`;
                             $('#list-template').append(button_template);
                             if($('#list-template').find('.button-template').length == 4){
-                                $(".btn-add").remove();
+                                $(".btn-add").addClass('d-none');
                             }
                         }
                         $("#template_id").val(res?.template_id);
                         $("#submit").attr('data-action', 'update');
+                        $("#delete-btn").removeClass('d-none');
+                        $("#submit-btn").removeClass('col-12').addClass('col-6');
                     }else{
                         $('#list-template').find('.button-template').each(function (){
                             if($(this).attr('data-template-id') == template_id){
@@ -437,7 +499,8 @@
                 },
                 success: function (res) {
                     swal.close();
-                    console.log(res);
+                    $("#delete-btn").removeClass('d-none');
+                    $("#submit-btn").removeClass('col-12').addClass('col-6');
                     $("#interval-date").val(res.data.interval_date);
                     $("#interval-type").val(res.data.interval_type);
                     $("#email-subject").val(res.data.email_subject);

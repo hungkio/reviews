@@ -110,11 +110,8 @@ class ReviewRequestController extends Controller
         }
     }
 
-    //Hàm này để lưu lại review từ form review trong email nhé
     public function saveReview(Request $request){
         Log::info(json_encode($request->all()));
-        dd($request->all());
-        return 'save success';
     }
 
     public function getTemplateInfo(Request $request)
@@ -124,6 +121,16 @@ class ReviewRequestController extends Controller
             ->where('id', $data['template_id'])
             ->first();
         return response()->json(['message' => 'success', 'data' =>$template, 'code' => 200], 200);
-
+    }
+    public function delete(Request $request){
+        try {
+            DB::table('review_request')
+                ->where('id', $request->template_id)
+                ->delete();
+            return response()->json(['message' => 'Successfully deleted', 'code'=> 200], 200);
+        } catch (Exception $e) {
+            print_r($e);
+            return response()->json(['message' => 'Something went wrong', 'code'=> 500], 200);
+        }
     }
 }
