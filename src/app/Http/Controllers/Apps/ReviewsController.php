@@ -150,7 +150,7 @@ class ReviewsController extends Controller
         try {
             DB::table('reviews')->insert($data_insert);
             DB::table('payments')->where('id' , $payment_id)->update([
-                'status_email' => 'Reviews',
+                'status_email' => 'Reviewed',
                 'updated_at' => Carbon::now()
             ]);
             
