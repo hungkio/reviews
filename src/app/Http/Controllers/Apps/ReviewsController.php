@@ -155,6 +155,7 @@ class ReviewsController extends Controller
             ]);
             
             if ($data['star'] > 3 && isset($payment->url)) {
+                return redirect()->away($payment->url);
             } else {
                 $details = [
                     'type' => 'feedback',
@@ -164,7 +165,6 @@ class ReviewsController extends Controller
                     Mail::to($payment->reply_to_email)->send(new ExampleMail($details));
                 }
             }
-            return redirect()->away($payment->url);
         } catch (Exception $e) {
             print_r($e);
         }

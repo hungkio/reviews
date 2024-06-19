@@ -132,7 +132,8 @@ $rating_style = isset($reviewRequests->rating_style) ? $reviewRequests->rating_s
 <div class="container" style="background-color: <?php echo $background_color; ?>;">
     <form action="{{ route('webform.show') }}" method="GET" class="form-wrapper">
         <input type="hidden" name="rating_style" value="{{$rating_style ?? 'stars'}}">
-        <input type="hidden" name="payment_id" value="{{$payment->payment_intent_id ?? ''}}">
+        <input type="hidden" name="payment_id" value="{{$payment->id ?? ''}}">
+        <input type="hidden" name="payment_intent_id" value="{{$payment->payment_intent_id ?? ''}}">
         <input type="hidden" name="email_body" value="{{$email_body ?? ''}}">
         <input type="hidden" name="background_color" value="{{$background_color ?? ''}}">
         <h1>Rate Us</h1>
