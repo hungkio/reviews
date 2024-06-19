@@ -39,7 +39,7 @@
             <!--begin::Table-->
             <div class="table-responsive mt-2">
                 <table id="queue_table"
-                       class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold"
+                       class="table table-row-bordered align-middle table-row-dashed fs-6 gy-5 dataTable no-footer text-gray-600 fw-semibold"
                        style="width:100%">
                     <thead class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                     <tr>
@@ -109,6 +109,7 @@
 
             function initDataTable() {
                 $("#queue_table").DataTable({
+                    order: [],
                     "language": {
                         "lengthMenu": "Show _MENU_",
                     },
