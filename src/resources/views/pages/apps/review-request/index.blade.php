@@ -221,8 +221,14 @@
                                     </button>
                                 </div>`
 
-        const ratingHTMLEmoji = `<div style=" text-align: center; padding: 0 10px;">
-                                    <div style="display: flex; justify-content: center; margin-bottom: 20px;">😢☹️😐😊😄</div>
+        const ratingHTMLEmoji = `<div style=" text-align: center; padding: 20px 10px; background-color: {{$background_color}}">
+                                    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                                        <span style=" font-size: 2em; cursor: pointer" data-value="1">😡</span>
+                                        <span style=" font-size: 2em; cursor: pointer" data-value="1">😟</span>
+                                        <span style=" font-size: 2em; cursor: pointer" data-value="1">😐</span>
+                                        <span style=" font-size: 2em; cursor: pointer" data-value="1">😊</span>
+                                        <span style=" font-size: 2em; cursor: pointer" data-value="1">😍</span>
+                                    </div>
                                     <textarea style="font-family: 'Montserrat', sans-serif; width: 100%;
                                             height: 120px;
                                             margin-bottom: 20px;
