@@ -104,6 +104,9 @@ class MailController extends Controller
         if(!$payment){
             return [];
         }
+        if($payment->status_email == 'Unsubscribed'){
+            return response()->json(['message' => 'Email cannot be sent with a queue whose status is unsubscribed', 'code' => 500], 200);
+        }
 
         $customer = DB::table('customers')
                 ->select('customers.customers_id', 'customers.email', 'customers.name', 'customers.phone', 'customers.address', 'customers.account_id', 'accounts.*')

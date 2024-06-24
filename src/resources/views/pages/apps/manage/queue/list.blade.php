@@ -62,11 +62,15 @@
                             <td class="date text-nowrap">{{$record['created_at']}}</td>
                             <td class="status text-nowrap">{{$record['status']}}</td>
                             <td class="text-nowrap">
-                                <div class="rounded">
-                                    <a href="javascript:;" onclick="updateStatus({{$record['id']}}, 'Cancel', this.parentElement.parentElement.parentElement, true)" class="btn btn-sm btn-light-primary">Cancel</a>
-                                    <a href="javascript:;" onclick="sendMail({{$record['id']}}, 'review', this.parentElement.parentElement.parentElement)" class="btn btn-sm btn-light-success">Send Now</a>
-                                    <a href="javascript:;" onclick="updateStatus({{$record['id']}}, 'Unsubscribe', this.parentElement.parentElement.parentElement, true)" class="btn btn-sm btn-light-warning">Unsubscribe</a>
+                                <div class="rounded btn-wrapper @if($record['status'] == 'Unsubscribed') d-none @endif">
+                                    <a href="javascript:;" onclick="updateStatus({{$record['id']}}, 'Cancel', this.parentElement.parentElement.parentElement, true)" class="btn-cancel btn btn-sm btn-light-primary">Cancel</a>
+                                    <a href="javascript:;" onclick="sendMail({{$record['id']}}, 'review', this.parentElement.parentElement.parentElement)" class="btm-send-now btn btn-sm btn-light-success">Send Now</a>
+                                    <a href="javascript:;" onclick="updateStatus({{$record['id']}}, 'Unsubscribe', this.parentElement.parentElement.parentElement, true)" class="btn-unsubscribe btn btn-sm btn-light-warning">Unsubscribe</a>
                                 </div>
+                                <div class="rounded btn-restore  @if($record['status'] != 'Unsubscribed') d-none @endif">
+                                    <a href="javascript:;" onclick="updateStatus({{$record['id']}}, 'Scheduled', this.parentElement.parentElement.parentElement, true)" class="btn-resubscribe btn btn-sm btn-light-danger">Resubscribe</a>
+                                </div>
+
                             </td>
                         </tr>
                     @endforeach
@@ -220,8 +224,24 @@
                         'X-CSRF-Token': csrfToken
                     },
                     success: function (res) {
-                        alertSuccess('Sent successfully');
-                        updateStatus(id, 'Sent', form, false);
+                        if(res.code == 500) {
+                            swal.close();
+                            setTimeout(()=>{
+                                Swal.fire({
+                                    text: res.message,
+                                    icon: "error",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary"
+                                    }
+                                });
+                            }, 500)
+                        }else{
+                            alertSuccess('Sent successfully');
+                            updateStatus(id, 'Sent', form, false);
+
+                        }
                     },
                     error: function (err) {
                         console.log(err)
@@ -231,7 +251,7 @@
             }
 
             function updateStatus(id, status, form, is_alert){
-                const status_update = status == 'Cancel' ? 'Canceled' : (status=='Sent' ? 'Sent' :'Unsubscribed');
+                const status_update = status == 'Cancel' ? 'Canceled' : (status=='Sent' ? 'Sent' : (status=='Scheduled' ? 'Scheduled' : 'Unsubscribed'));
                 showLoading()
                 $.ajax({
                     url: '/manage/queue/update-status',
@@ -243,6 +263,13 @@
                     success: function (res) {
                         if(res.code == 200){
                             $(form).find('.status').first().text(status_update);
+                            if(status_update == 'Unsubscribed'){
+                                $(form).find('.btn-restore').first().removeClass('d-none');
+                                $(form).find('.btn-wrapper').first().addClass('d-none');
+                            }else{
+                                $(form).find('.btn-restore').first().addClass('d-none');
+                                $(form).find('.btn-wrapper').first().removeClass('d-none');
+                            }
                             if(is_alert){
                                 alertSuccess('Updated successfully')
                             }
