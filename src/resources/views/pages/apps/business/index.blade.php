@@ -69,6 +69,11 @@
                 <label for="reply_to_email">Reply to Email Address:</label>
                 <input type="email"  value="{{ $business->reply_to_email ?? '' }}" id="reply_to_email" name="reply_to_email" required placeholder="">
             </div>
+            <div class="form-group">
+                <label for="physical_address">Physical Address:</label>
+                <input type="text" value="{{ $business->physical_address ?? '' }}" id="physical_address" name="physical_address" required>
+            </div>
+            
             
             <button type="submit" class="btn-success">Save</button>
         </form>

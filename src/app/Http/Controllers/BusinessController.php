@@ -22,6 +22,7 @@ class BusinessController extends Controller
             ->addSelect('color')
             ->addSelect('from_email')
             ->addSelect('reply_to_email')
+            ->addSelect('physical_address')
             ->where('accounts_id', $user->account_id)
             ->first();
         return view('pages/apps.business.index', compact('business'));
@@ -51,6 +52,7 @@ class BusinessController extends Controller
             'color' => $data['color'] ?? $check_exits->color ?? '',
             'from_email' => $data['from_email'] ?? $check_exits->from_email ?? '',
             'reply_to_email' => $data['reply_to_email'] ?? $check_exits->reply_to_email ?? '',
+            'physical_address' => $data['physical_address'] ?? $check_exits->physical_address ?? '',
             'updated_at' => Carbon::now(),
         ];
 
