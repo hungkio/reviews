@@ -27,10 +27,10 @@
         <!--begin::Card body-->
         <div class="card-body py-4">
             <div class="row fv-row">
-                <div class="col-md-4 col12">
+                <div class="col-md-6 col-12">
                     <div class="row">
                         <div class="col-4">
-                            <select id="filter_by_key" onchange="filter()" class="form-control form-control-solid" data-control="select2"
+                            <select id="filter_by_key" class="form-control form-control-solid" data-control="select2"
                                     data-placeholder="Filter">
                                 <option value="" selected disabled>All</option>
                                 <optgroup label="Rating">
@@ -61,7 +61,7 @@
                             </select>
                         </div>
                         <div class="col-4">
-                            <input onchange="filter()" class="form-control form-control-solid" placeholder="Pick a date"
+                            <input class="form-control form-control-solid" placeholder="Pick a date"
                                    id="filter_date" value=""/>
                         </div>
                         <div class="col-4">
@@ -90,7 +90,7 @@
                     <tbody>
                     @foreach ($result as $key => $record)
                         <tr class=" w-100">
-                            <td data-bs-toggle="tooltip" class="row-item row_item_{{$record->id}} row cursor-pointer w-100" data-star="{{$record->star}}" data-status="{{$record->status ? 'publish' : 'unpublish'}}" data-source="{{$record->source}}" data-date="{{\Carbon\Carbon::parse($record->created_at)->format('d/m/Y')}}">
+                            <td data-bs-toggle="tooltip" class="row-item row_item_{{$record->id}} row cursor-pointer w-100" data-date-timestamp="{{\Carbon\Carbon::parse($record->dateTime)->timestamp}}" data-star="{{$record->star}}" data-status="{{$record->status ? 'publish' : 'unpublish'}}" data-source="{{$record->source}}" data-date="{{\Carbon\Carbon::parse($record->created_at)->format('d/m/Y')}}">
                                 <div class="col-2">
                                     <input onchange="toggleCheckInput({{$record->id}})" class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
                                     <div>
@@ -160,22 +160,30 @@
 
             function initDatePicker() {
                 $(document).ready(function () {
-                    $("#filter_date").daterangepicker({
-                        singleDatePicker: true,
-                        showDropdowns: true,
-                        minYear: 1901,
-                        maxYear: parseInt(moment().format("YYYY"), 12),
-                        autoUpdateInput: false,
-                        locale: {
-                            format: 'DD/MM/YYYY'
-                        }
-                    });
+                    $("#filter_date").daterangepicker();
                     $('#filter_date').on('apply.daterangepicker', function (ev, picker) {
-                        var formattedDate = picker.startDate.format('DD/MM/YYYY');
-                        $(this).val(formattedDate);
-                        filter();
+                        var startDateTimestamp = picker.startDate.unix();
+                        var endDateTimestamp = picker.endDate.unix();
+                        filter(startDateTimestamp, endDateTimestamp);
+                        localStorage.setItem('start_date', startDateTimestamp);
+                        localStorage.setItem('end_date', endDateTimestamp);
                     });
                     $('#filter_date').val('');
+                    $('#filter_by_key').change(function(event) {
+                        event.preventDefault();
+                        // const dateString = $('#filter_date').val();
+                        // var dates = dateString.split(" - ");
+                        // var startDateString = dates[0];
+                        // var endDateString = dates[1];
+                        // var startDate = new Date(startDateString);
+                        // var endDate = new Date(endDateString);
+                        // var start_date = startDate.getTime();
+                        // var end_date = endDate.getTime();
+
+                        const start_date = localStorage.getItem('start_date');
+                        const end_date = localStorage.getItem('end_date');
+                        filter(isNaN(start_date) ? undefined : start_date, isNaN(end_date) ? undefined : end_date);
+                    });
                 });
             }
 
@@ -270,13 +278,12 @@
                 })
             }
 
-            function filter(){
+            function filter(start_date, end_date){
                 const key = $("#filter_by_key").val();
-                const date = $("#filter_date").val();
-                if(!key && !date){
+                if(!key && (start_date == undefined || end_date == undefined)){
                     $("#reviews_table").find('.row-item').removeClass('d-none')
                 }
-                if(key && !date){
+                if(key && start_date == undefined && end_date == undefined){
                     $("#reviews_table").find('.row-item').each(function (){
                         if($(this).attr('data-star') == key || $(this).attr('data-source') == key || $(this).attr('data-status')== key || key == 'all'){
                             $(this).removeClass('d-none');
@@ -286,18 +293,18 @@
                     })
                 }
 
-                if(!key && date){
+                if(!key && start_date != undefined && end_date != undefined){
                     $("#reviews_table").find('.row-item').each(function (){
-                        if($(this).attr('data-date') == date ){
+                        if($(this).attr('data-date-timestamp') < end_date && $(this).attr('data-date-timestamp') > start_date){
                             $(this).removeClass('d-none');
                         }else{
                             $(this).addClass('d-none');
                         }
                     })
                 }
-                if(date && key){
+                if(key && start_date != undefined && end_date != undefined){
                     $("#reviews_table").find('.row-item').each(function (){
-                        if($(this).attr('data-date') == date ){
+                        if($(this).attr('data-date-timestamp') < end_date && $(this).attr('data-date-timestamp') > start_date){
                             if($(this).attr('data-star') == key || $(this).attr('data-source') == key || $(this).attr('data-status')== key || key == 'all' ) {
                                 $(this).removeClass('d-none');
                             }else{
