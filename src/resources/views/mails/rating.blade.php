@@ -162,6 +162,10 @@ $rating_style = isset($reviewRequests->rating_style) ? $reviewRequests->rating_s
         </div>
         <button class="btn-submit" type="submit">Submit</button>
     </form>
+    <p style="text-align: center">This email was sent to you by {{$data->business_name}}</p>
+    <p style="text-align: center">You are receiving this email because you made a purchase from {{$data->business_name}}</p>
+    <p style="text-align: center">If you wish to unsubscribe from all future emails, please click here.</p>
+    <p style="text-align: center">{{$data->physical_address}}</p>
 </div>
 </body>
 
